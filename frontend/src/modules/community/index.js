@@ -1,0 +1,36 @@
+/**
+ * Re-export of the Community Features module.
+ * Use this path for a cleaner structure; implementation lives in src/components/community.
+ */
+export {
+  CommunityFeatures,
+  CommunityThemeProvider,
+  useCommunityTheme,
+  DarkModeToggle,
+  ParticipationTracker,
+  ResumeAchievementProfile,
+  ContributionScoreTier,
+  PlacementReadiness,
+  CodingProfileSummary,
+  KudosDisplay,
+  DepartmentLeaderboard,
+  CertificateVerification,
+  MemberOfTheMonthCard,
+  SmartParticipationInsights,
+  ActivityHeatmap,
+  DigitalMemberIdCard,
+  EventRecommendations,
+  Leaderboards,
+  CommunityBlog,
+  MemberEngagement,
+  AnalyticsSummary,
+  SearchFilterBar,
+  ActivityFeed,
+  GamificationSection,
+  TopDepartmentHighlight,
+  AchievementUnlock,
+  PersonalizedRecommendations,
+  CollapsibleSection,
+  AnalyticsStrip,
+  EventManagementSection,
+} from '../../components/community';
