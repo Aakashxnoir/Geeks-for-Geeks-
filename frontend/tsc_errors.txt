@@ -1,0 +1,4 @@
+﻿src/App.tsx(28,50): error TS2503: Cannot find namespace 'JSX'.
+src/App.tsx(174,7): error TS2322: Type '{ children: Element; future: { v7_startTransition: boolean; v7_relativeSplatPath: boolean; }; }' is not assignable to type 'IntrinsicAttributes & BrowserRouterProps'.
+  Property 'future' does not exist on type 'IntrinsicAttributes & BrowserRouterProps'.
+src/components/community/index.ts(3,43): error TS2307: Cannot find module './DarkModeToggle' or its corresponding type declarations.

@@ -1,7 +1,16 @@
-import { useSiteTheme } from '../../context/SiteThemeContext';
+import { ReactNode } from 'react';
+import { useSiteTheme } from '../../lib/context/SiteThemeContext';
+
+interface PageLayoutProps {
+  title: string;
+  subtitle?: string;
+  showAnalyticsStrip?: boolean;
+  analyticsStrip?: ReactNode;
+  children: ReactNode;
+}
 
 /**
- * Layout wrapper for site pages: same container and header (title + subtitle).
+ * Layout wrapper for site pages: consistent container and header (title + subtitle).
  * Search and dark mode live in the navbar only; no duplicate toggle or search here.
  */
 export default function PageLayout({
@@ -10,7 +19,7 @@ export default function PageLayout({
   showAnalyticsStrip,
   analyticsStrip,
   children,
-}) {
+}: PageLayoutProps) {
   const { isDark } = useSiteTheme();
 
   return (

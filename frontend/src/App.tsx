@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { SiteThemeProvider } from './context/SiteThemeContext';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { SearchProvider } from './context/SearchContext';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import BackToTop from './components/BackToTop';
-import ClubInfo from './components/ClubInfo';
+import { SiteThemeProvider } from './lib/context/SiteThemeContext';
+import { AuthProvider, useAuth } from './lib/context/AuthContext';
+import { SearchProvider } from './lib/context/SearchContext';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+import BackToTop from './components/layout/BackToTop';
+import ClubInfo from './components/layout/ClubInfo';
 import Home from './pages/Home';
 import Contact from './pages/Contact';
 import Events from './pages/Events';
@@ -16,6 +16,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import SettingsPage from './pages/Settings';
 import CommunityPage from './pages/CommunityPage';
+import Dashboard from './pages/Dashboard';
 import Join from './pages/Join';
 import NotFound from './pages/NotFound';
 
@@ -24,7 +25,7 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
   const location = useLocation();
   const isAuthRoute = location.pathname === '/signin' || location.pathname === '/signup';
 
-  const RequireAuth = ({ children }: { children: JSX.Element }) => {
+  const RequireAuth = ({ children }: { children: React.ReactNode }) => {
     if (!isAuthenticated) {
       return <Navigate to="/signin" replace />;
     }
@@ -34,7 +35,7 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
   return (
     <>
       {!isAuthRoute && <Navbar darkMode={darkMode} onToggleDarkMode={toggleTheme} />}
-      <main className="gfg-main" style={{ flex: 1 }}>
+      <main className="gfg-main" id="gfg-main-content" style={{ flex: 1 }}>
         <Routes>
           <Route
             path="/signin"
@@ -57,6 +58,14 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
             element={
               <RequireAuth>
                 <ClubInfo />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <RequireAuth>
+                <Dashboard />
               </RequireAuth>
             }
           />
@@ -161,12 +170,7 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
-    >
+    <BrowserRouter>
       <AppContent />
     </BrowserRouter>
   );
