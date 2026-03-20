@@ -19,6 +19,7 @@ import SettingsPage from './pages/Settings';
 import CommunityPage from './pages/CommunityPage';
 import Join from './pages/Join';
 import NotFound from './pages/NotFound';
+import BadgesPage from './pages/BadgesPage';
 import { CardDetailModal } from './components/ui/CardDetailModal';
 import { CardDetailProvider } from './lib/context/CardDetailContext';
 import BottomNav from './components/layout/BottomNav';
@@ -27,6 +28,7 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
   const { isAuthenticated, logout } = useAuth();
   const location = useLocation();
   const isAuthRoute = location.pathname === '/signin' || location.pathname === '/signup';
+  const isStandaloneRoute = location.pathname === '/badges';
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const RequireAuth = ({ children }: { children: React.ReactNode }) => {
@@ -38,7 +40,7 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
 
   return (
     <div className="flex flex-col min-h-screen w-full relative">
-      {!isAuthRoute && (
+      {!isAuthRoute && !isStandaloneRoute && (
         <>
           <Sidebar 
             isOpen={sidebarOpen} 
@@ -56,7 +58,7 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
           <BottomNav />
         </>
       )}
-      <main className={`gfg-main flex-grow w-full transition-all duration-300 ${!isAuthRoute ? 'pt-16 sm:pt-20' : ''}`} id="gfg-main-content">
+      <main className={`gfg-main flex-grow w-full transition-all duration-300 ${!isAuthRoute && !isStandaloneRoute ? 'pt-16 sm:pt-20' : ''}`} id="gfg-main-content">
         <Routes>
           <Route
             path="/signin"
@@ -146,13 +148,19 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
               </RequireAuth>
             }
           />
+          <Route
+            path="/badges"
+            element={
+              <RequireAuth>
+                <BadgesPage />
+              </RequireAuth>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      {!isAuthRoute && <Footer />}
-      
-      {/* Spacer for mobile BottomNav to prevent obscuring the footer */}
-      {!isAuthRoute && <div className="h-20 lg:hidden w-full shrink-0" />}
+      {!isAuthRoute && !isStandaloneRoute && <Footer />}
+      {!isAuthRoute && !isStandaloneRoute && <div className="h-20 lg:hidden w-full shrink-0" />}
 
       <BackToTop />
     </div>
