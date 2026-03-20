@@ -102,9 +102,14 @@ html.dark {
   --gfg-shadow-card-hover: 0 4px 16px rgba(0,0,0,0.3);
 }
 
+html {
+  background: radial-gradient(ellipse at top, #ecfdf5 0%, #f0f9ff 40%, #f8fafc 100%) no-repeat fixed;
+  min-height: 100vh;
+}
+
 body {
-  background: radial-gradient(ellipse at top, #ecfdf5 0%, #f0f9ff 40%, #f8fafc 100%);
-  background-attachment: scroll;
+  margin: 0;
+  min-height: 100vh;
   color: var(--gfg-text-primary);
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
@@ -112,9 +117,12 @@ body {
   transition: background 0.3s ease-out, color 0.2s ease-out;
 }
 
-html.dark, html.dark body, html.dark #root {
+html.dark {
   background: #000000 !important;
-  background-attachment: scroll !important;
+}
+
+html.dark body, html.dark #root {
+  background: transparent !important;
   color: #FFFFFF;
 }
 
@@ -122,7 +130,13 @@ html.dark, html.dark body, html.dark #root {
 .gfg-community-module {
   /* Inherit from body to prevent duplicate backgrounds */
   background: transparent !important;
+  color: inherit;
 }
+
+.gfg-main {
+  transition: padding-left 0.3s ease-out;
+}
+
 
 .gfg-shell {
   width: 100%;
@@ -326,6 +340,21 @@ html.dark .glass-card,
   background: rgba(148, 163, 184, 0.4);
 }
 
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.rotate-y-0 {
+  transform: rotateY(0deg);
+}
+
+.rotate-y-5 {
+  transform: rotateY(5deg);
+}
+
+.rotate-y-12 {
+  transform: rotateY(12deg);
+}
 
 /* Buttons */
 .gfg-btn {
@@ -448,7 +477,9 @@ html.dark .glass-card,
 }
 
 /* Dark mode: Community module and site pages (PageLayout) — match root and descendants */
+/* stylelint-disable at-rule-no-unknown */
 @custom-variant dark (&:is(.dark, .dark *, .gfg-community-module.dark, .gfg-community-module.dark *, .gfg-page-module.dark, .gfg-page-module.dark *));
+/* stylelint-enable at-rule-no-unknown */
 
 /* Premium dark theme — black background, high-contrast cards and text */
 /* Root background/color applied here so dark mode applies to the module root (variant only matches descendants) */
@@ -1344,16 +1375,24 @@ html.dark {
   --gfg-border-strong: #484f58;
 }
 /* Whole page uses same background as Community (no white sidebar) */
-html, body { margin: 0; min-height: 100vh; background: var(--gfg-bg); color: var(--gfg-text); transition: background 0.25s ease, color 0.2s ease; }
-#root { min-height: 100vh; display: flex; flex-direction: column; background: var(--gfg-bg); color: var(--gfg-text); }
+html, body { 
+  margin: 0; 
+  min-height: 100vh; 
+}
+
+#root { 
+  min-height: 100vh; 
+  display: flex; 
+  flex-direction: column; 
+}
 /* Main content area reflects dark mode so all pages are consistent */
-.gfg-main { background: var(--gfg-bg); color: var(--gfg-text); flex: 1; transition: background 0.25s ease, color 0.2s ease; }
+.gfg-main { color: var(--gfg-text-primary); flex: 1; transition: background 0.25s ease, color 0.2s ease; }
 
 /* ========== Premium SaaS-quality UI: readability, cards, contrast ========== */
 .gfg-page-module {
   /* Light theme keeps the softer solid background for readability */
-  background: var(--gfg-bg) !important;
-  color: var(--gfg-text);
+  background: transparent !important;
+  color: var(--gfg-text-primary);
 }
 .gfg-page-module p,
 .gfg-page-module li {
@@ -1363,7 +1402,7 @@ html, body { margin: 0; min-height: 100vh; background: var(--gfg-bg); color: var
 .gfg-page-module p { color: var(--gfg-text-secondary); }
 .gfg-page-module.dark p,
 .gfg-page-module.dark li { color: #FFFFFF !important; }
-.gfg-page-module h1, .gfg-page-module h2, .gfg-page-module h3, .gfg-page-module h4 { color: var(--gfg-text); }
+.gfg-page-module h1, .gfg-page-module h2, .gfg-page-module h3, .gfg-page-module h4 { color: var(--gfg-text-primary); }
 .gfg-page-module.dark h1, .gfg-page-module.dark h2, .gfg-page-module.dark h3, .gfg-page-module.dark h4 { color: #FFFFFF !important; }
 .gfg-page-module .text-sm { line-height: 1.55; }
 .gfg-page-module .text-xs { line-height: 1.5; }
@@ -1457,13 +1496,12 @@ html.dark .gfg-page-module textarea:focus-visible {
 }
 
 /* Home page — compact header matching Community module style */
-.home-page.site-page { background-color: var(--gfg-bg); color: var(--gfg-text); min-height: 100vh; transition: background-color 0.25s ease, color 0.2s ease; }
+.home-page.site-page { color: var(--gfg-text-primary); min-height: 100vh; transition: background-color 0.25s ease, color 0.2s ease; }
 .home-header {
   padding: 2rem 1rem 2.5rem; border-bottom: 1px solid var(--gfg-border);
-  background: var(--gfg-bg);
 }
 .home-header-inner { max-width: 1280px; margin: 0 auto; }
-.home-header-title { font-size: 1.75rem; font-weight: 700; color: var(--gfg-text); margin: 0 0 0.25rem 0; }
+.home-header-title { font-size: 1.75rem; font-weight: 700; color: var(--gfg-text-primary); margin: 0 0 0.25rem 0; }
 .home-header-tagline { font-size: 0.95rem; color: var(--gfg-text-secondary); margin: 0 0 1.25rem 0; line-height: 1.5; }
 .home-header-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
 .home-join-btn {
@@ -1481,7 +1519,7 @@ html.dark .home-join-btn-primary:hover { background: #16A34A; border-color: #16A
 .home-container { max-width: 1280px; margin: 0 auto; padding: 2rem 1rem; }
 .home-section { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
 .home-section.home-visible { opacity: 1; transform: translateY(0); }
-.home-section h2 { font-size: 1.5rem; font-weight: 600; color: var(--gfg-text); margin: 0 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--gfg-green); }
+.home-section h2 { font-size: 1.5rem; font-weight: 600; color: var(--gfg-text-primary); margin: 0 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--gfg-green); }
 html.dark .home-section h2 { border-bottom-color: rgba(34, 197, 94, 0.5); }
 .home-about-text { color: var(--gfg-text-secondary); line-height: 1.75; margin-bottom: 1rem; max-width: 60ch; }
 .home-highlights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-top: 1rem; }

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Medal, ArrowRight, CheckCircle, Lock } from 'lucide-react';
-import { ALL_BADGES } from '../../pages/BadgesPage';
+import { ALL_BADGES } from '../../utils/data/badgesData';
 
 const RARITY_GRADIENT = {
   common: 'from-slate-400 to-slate-600',

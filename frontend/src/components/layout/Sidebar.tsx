@@ -26,6 +26,7 @@ const navigationGroups = [
     title: 'OVERVIEW',
     items: [
       { to: '/app', label: 'Home', icon: Home },
+      { to: '/profile', label: 'My Profile', icon: User },
     ]
   },
   {

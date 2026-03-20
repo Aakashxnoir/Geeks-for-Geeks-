@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import ParticipationTracker from './ParticipationTracker';
 import Leaderboards from './Leaderboards';
 import CommunityBlog from './CommunityBlog';
@@ -75,8 +76,8 @@ function NavSidebar() {
           </button>
         ))}
         {/* Badges — navigates to /badges page */}
-        <a
-          href="/badges"
+        <Link
+          to="/badges"
           className="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200
                    text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/10
                    hover:bg-amber-100 dark:hover:bg-amber-900/20 border border-amber-200/60 dark:border-amber-400/20
@@ -84,7 +85,7 @@ function NavSidebar() {
         >
           <span className="group-hover:scale-110 transition-transform"><Medal className="w-5 h-5" /></span>
           Badges
-        </a>
+        </Link>
       </nav>
       
       <div className="mt-auto px-4 py-6 rounded-2xl bg-gradient-to-br from-[#2F8D46]/5 to-[#2F8D46]/10 border border-[#2F8D46]/10">

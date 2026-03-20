@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { SiteThemeProvider } from './lib/context/SiteThemeContext';
 import { AuthProvider, useAuth } from './lib/context/AuthContext';
 import { SearchProvider } from './lib/context/SearchContext';
 import { AnimatePresence, motion } from 'motion/react';
 import TopBar from './components/layout/TopBar';
-import Sidebar from './components/layout/Sidebar';
 import Footer from './components/layout/Footer';
 import BackToTop from './components/layout/BackToTop';
 import WebsiteAssistant from './components/layout/WebsiteAssistant';
@@ -23,6 +22,7 @@ import CommunityPage from './pages/CommunityPage';
 import Join from './pages/Join';
 import NotFound from './pages/NotFound';
 import BadgesPage from './pages/BadgesPage';
+import ProfilePage from './pages/Profile';
 import { CardDetailModal } from './components/ui/CardDetailModal';
 import { CardDetailProvider } from './lib/context/CardDetailContext';
 import BottomNav from './components/layout/BottomNav';
@@ -34,7 +34,6 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
   const isStandaloneRoute = location.pathname === '/badges';
   const showAppChrome = !authLoading && isAuthenticated && !isStandaloneRoute && !isAuthRoute && location.pathname !== '/';
   const showAssistant = !authLoading && isAuthenticated && !isAuthRoute && location.pathname !== '/';
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const RequireAuth = ({ children }: { children: React.ReactNode }) => {
     if (authLoading) return null;
@@ -48,18 +47,9 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
     <div className="flex flex-col min-h-screen w-full relative">
       {showAppChrome && (
         <>
-          <Sidebar 
-            isOpen={sidebarOpen} 
-            onClose={() => setSidebarOpen(false)} 
-            isAuthenticated={isAuthenticated}
-            logout={logout}
-            darkMode={darkMode}
-            onToggleDarkMode={toggleTheme}
-          />
           <TopBar 
             darkMode={darkMode} 
             onToggleDarkMode={toggleTheme} 
-            onOpenSidebar={() => setSidebarOpen(true)}
           />
           <BottomNav />
         </>
@@ -74,7 +64,7 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.22, ease: 'easeOut' }}
           >
-            <Routes>
+            <Routes location={location}>
               <Route
                 path="/signin"
                 element={authLoading ? null : isAuthenticated ? <Navigate to="/app" replace /> : <SignIn />}
@@ -172,6 +162,14 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
                   </RequireAuth>
                 }
               />
+              <Route
+                path="/profile"
+                element={
+                  <RequireAuth>
+                    <ProfilePage />
+                  </RequireAuth>
+                }
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </motion.div>
@@ -226,8 +224,8 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AppContent />
-    </BrowserRouter>
+    </HashRouter>
   );
 }

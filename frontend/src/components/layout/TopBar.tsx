@@ -7,10 +7,9 @@ import { useAuth } from '../../lib/context/AuthContext';
 interface TopBarProps {
   darkMode: boolean;
   onToggleDarkMode: () => void;
-  onOpenSidebar: () => void;
 }
 
-const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
+const TopBar = ({ darkMode, onToggleDarkMode }: TopBarProps) => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { query, setQuery, submitSearch } = useSearch();
@@ -86,7 +85,7 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
 
   const handleProfileClick = () => {
     setSettingsOpen(false);
-    navigate('/settings');
+    navigate('/profile');
   };
 
   const handleSignOut = () => {
@@ -100,15 +99,6 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
       <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 w-full max-w-[1440px] mx-auto">
         
         <div className="flex items-center gap-2 sm:gap-4 flex-1">
-          {/* Mobile Hamburger (Only visible on mobile) */}
-          <button
-            type="button"
-            className="flex sm:hidden p-2 -ml-1 rounded-xl text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
-            onClick={onOpenSidebar}
-          >
-            <Menu className="w-4 h-4" />
-          </button>
-
           <Link to="/app" className="flex items-center gap-2 group whitespace-nowrap">
             <img src="/logo.png" alt="Logo" className="w-7 h-7 sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
             <span className="text-xs sm:text-sm font-black tracking-tight dark:text-white uppercase transition-colors">

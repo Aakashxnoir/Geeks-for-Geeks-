@@ -38,7 +38,7 @@ export class AppErrorBoundary extends Component<Props, State> {
             {this.state.error?.message ?? 'An unexpected error occurred.'}
           </p>
           <a
-            href="/"
+            href="#/"
             style={{
               padding: '10px 20px',
               background: '#22C55E',
