@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
 import { Crown, Award, Calendar, Code2 } from 'lucide-react';
 import { LEADERBOARD_MONTHLY, STUDENTS } from '../../utils/data/communityMockData';
+import { useCardDetail } from '../../lib/context/CardDetailContext';
 
 export default function MemberOfTheMonthCard() {
+  const { showDetails } = useCardDetail();
   const member = useMemo(() => {
     const top = LEADERBOARD_MONTHLY[0];
     if (!top) return null;
@@ -11,8 +13,28 @@ export default function MemberOfTheMonthCard() {
 
   if (!member?.student) return null;
 
+  const handleCardClick = () => {
+    showDetails({
+      title: `${member.name} — Member of the Month`,
+      subtitle: `Department: ${member.department}`,
+      functionality: "Recognizes the highest-contributing student each month based on a combination of event attendance, problem solving on GFG, and community engagement scores.",
+      description: `This detailed report showcases ${member.name}'s performance. They have solved ${member.student?.problemsSolved} problems and attended ${member.student?.eventsAttended} events this month alone. Their total contribution score of ${member.score} points places them at the peak of the RIT club rankings.`,
+      stats: [
+        { label: "Points", value: member.score },
+        { label: "Problems", value: member.student?.problemsSolved || 0 },
+        { label: "Events", value: member.student?.eventsAttended || 0 },
+        { label: "Rank", value: "#1" }
+      ],
+      exportData: member,
+      componentName: "MemberOfTheMonthCard"
+    });
+  };
+
   return (
-    <section className="gfg-mom-card bg-white dark:bg-[#141922] rounded-xl border border-[#E5E7EB] dark:border-[#3d4a5c] overflow-hidden">
+    <section 
+      onClick={handleCardClick}
+      className="gfg-mom-card glass-card overflow-hidden cursor-pointer hover:ring-2 hover:ring-[color:var(--gfg-accent)] active:scale-[0.99] transition-all"
+    >
       <div className="gfg-mom-card-header px-4 sm:px-6 py-4 border-b border-[#E5E7EB] dark:border-[#3d4a5c] flex items-center gap-2 bg-[#F9FAFB] dark:bg-[#1c212e]">
         <Crown className="w-5 h-5 text-[#2F8D46] dark:text-[#22C55E] shrink-0" />
         <h2 className="gfg-mom-title text-base sm:text-lg font-bold text-[#1F2937] dark:text-[#FFFFFF]">
@@ -67,4 +89,5 @@ export default function MemberOfTheMonthCard() {
     </section>
   );
 }
+
 

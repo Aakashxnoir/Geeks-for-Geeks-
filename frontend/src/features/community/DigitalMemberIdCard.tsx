@@ -19,7 +19,7 @@ export default function DigitalMemberIdCard() {
   const membershipId = `GFG-RIT-${member.department}-${member.rollNumber}`;
 
   return (
-    <section className="bg-white dark:bg-[#141922] rounded-xl border border-[#E5E7EB] dark:border-[#3d4a5c] overflow-hidden">
+    <section className="glass-card overflow-hidden">
       <div className="px-4 sm:px-6 py-4 border-b border-[#E5E7EB] dark:border-[#3d4a5c]">
         <h2 className="text-base sm:text-lg font-semibold text-[#1F2937] dark:text-[#FFFFFF] flex items-center gap-2">
           <CreditCard className="w-5 h-5 text-[#2F8D46] dark:text-[#22C55E] shrink-0" />
@@ -73,4 +73,5 @@ export default function DigitalMemberIdCard() {
     </section>
   );
 }
+
 

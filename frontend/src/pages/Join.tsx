@@ -25,7 +25,7 @@ export default function Join() {
             href={JOIN_FORM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-4 p-4 rounded-xl border border-[#E5E7EB] dark:border-[#30363d] bg-[#F9FAFB] dark:bg-[#0d1117] hover:border-[#2F8D46] dark:hover:border-[#22C55E] transition-colors group"
+            className="glass-card-soft flex items-center gap-4 p-4 border border-white/10 hover:border-[color:var(--gfg-accent)] transition-all group"
           >
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#2F8D46]/10 dark:bg-[#22C55E]/20 text-[#2F8D46] dark:text-[#22C55E]">
               <FileText className="w-6 h-6" aria-hidden />
@@ -45,7 +45,7 @@ export default function Join() {
             href={WHATSAPP_GROUP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-4 p-4 rounded-xl border border-[#E5E7EB] dark:border-[#30363d] bg-[#F9FAFB] dark:bg-[#0d1117] hover:border-[#2F8D46] dark:hover:border-[#22C55E] transition-colors group"
+            className="glass-card-soft flex items-center gap-4 p-4 border border-white/10 hover:border-[color:var(--gfg-accent)] transition-all group"
           >
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#2F8D46]/10 dark:bg-[#22C55E]/20 text-[#2F8D46] dark:text-[#22C55E]">
               <MessageCircle className="w-6 h-6" aria-hidden />
@@ -114,3 +114,4 @@ export default function Join() {
     </PageLayout>
   );
 }
+

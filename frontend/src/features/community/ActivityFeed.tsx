@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Trophy, Code2, BookOpen, Calendar, Wrench } from 'lucide-react';
 import { ACTIVITY_FEED, type ActivityItem } from '../../utils/data/communityMockData';
+import { useCardDetail } from '../../lib/context/CardDetailContext';
 
 const ICON_MAP: Record<ActivityItem['type'], typeof Trophy> = {
   achievement: Trophy,
@@ -29,7 +30,24 @@ function FeedItem({ item }: { item: ActivityItem }) {
 const MOCK_ROTATE_INTERVAL_MS = 5000;
 
 export default function ActivityFeed() {
+  const { showDetails } = useCardDetail();
   const [items, setItems] = useState<ActivityItem[]>(ACTIVITY_FEED);
+
+  const handleCardClick = () => {
+    showDetails({
+      title: "Live Activity Feed",
+      subtitle: "Campus-wide events & updates",
+      functionality: "Provides a real-time stream of significant accomplishments, recently joined events, and content updates across the RIT GFG Campus Club. Items are automatically pushed to the feed as they occur.",
+      description: "The live feed aggregates data from achievement unlocks, contest participations, new blog posts, and official club events. It's designed to keep members informed about community momentum and provide inspiration through peer successes.",
+      stats: [
+        { label: "Daily Updates", value: "40+" },
+        { label: "Categories", value: "5" },
+        { label: "Active Buffer", value: items.length }
+      ],
+      exportData: items,
+      componentName: "ActivityFeed"
+    });
+  };
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -44,12 +62,15 @@ export default function ActivityFeed() {
   }, []);
 
   return (
-    <section className="bg-white dark:bg-[#141922] rounded-xl border border-[#E5E7EB] dark:border-[#3d4a5c] overflow-hidden">
-      <div className="px-4 py-3 border-b border-[#E5E7EB] dark:border-[#3d4a5c] flex items-center justify-between">
+    <section 
+      onClick={handleCardClick}
+      className="glass-card overflow-hidden cursor-pointer hover:shadow-lg hover:shadow-green-500/5 active:scale-[0.995] transition-all"
+    >
+      <div className="px-4 py-3 border-b border-[#E5E7EB] dark:border-[#3d4a5c] flex items-center justify-between pointer-events-none">
         <h3 className="text-sm font-semibold text-[#1F2937] dark:text-[#FFFFFF]">Live activity</h3>
         <span className="flex h-2 w-2 rounded-full bg-green-500 dark:bg-[#22C55E] animate-pulse" aria-hidden />
       </div>
-      <div className="p-4 max-h-72 sm:max-h-80 overflow-y-auto dark:bg-[#141922]">
+      <div className="p-4 max-h-72 sm:max-h-80 overflow-y-auto dark:bg-[#141922] pointer-events-none">
         {items.map((item) => (
           <FeedItem key={item.id} item={item} />
         ))}
@@ -57,3 +78,4 @@ export default function ActivityFeed() {
     </section>
   );
 }
+

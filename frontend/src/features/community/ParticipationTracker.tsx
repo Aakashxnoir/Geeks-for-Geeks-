@@ -19,6 +19,7 @@ import {
   DEPARTMENTS,
   YEARS,
 } from '../../utils/data/communityMockData';
+import { useCardDetail } from '../../lib/context/CardDetailContext';
 import { clsx } from 'clsx';
 import ResumeAchievementProfile from './ResumeAchievementProfile';
 
@@ -128,6 +129,7 @@ export default function ParticipationTracker({
   onSearchQueryChange?: (q: string) => void;
   searchQuery?: string;
 }) {
+  const { showDetails } = useCardDetail();
   const [deptFilter, setDeptFilter] = useState<string>('');
   const [yearFilter, setYearFilter] = useState<number | ''>('');
   const [sortBy, setSortBy] = useState<'activity' | 'problems' | 'streak' | 'points'>('points');
@@ -171,9 +173,30 @@ export default function ParticipationTracker({
     onSearchQueryChange?.(value);
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+     if ((e.target as HTMLElement).closest('input, select, button')) return;
+     
+     showDetails({
+       title: "Participation Tracker Analysis",
+       subtitle: "Student Contribution Metrics",
+       functionality: "Aggregates and filters student performance data across academic years and departments. It tracks problem-solving progress, event attendance, and contribution hours.",
+       description: "This tracker provides a transparent view of member engagement. It allows the Core Team to identify top performers and help students build 'Resume-Ready' profiles by documenting their verified club contributions.",
+       stats: [
+         { label: "Tracked Students", value: STUDENTS.length },
+         { label: "Total Points", value: STUDENTS.reduce((acc, s) => acc + s.points, 0).toLocaleString() },
+         { label: "Avg. Problems", value: Math.round(STUDENTS.reduce((acc, s) => acc + s.problemsSolved, 0) / STUDENTS.length) }
+       ],
+       exportData: filteredAndSorted,
+       componentName: "ParticipationTracker"
+     });
+  };
+
   return (
-    <section className="bg-white dark:bg-[#141922] rounded-xl border border-[#E5E7EB] dark:border-[#3d4a5c] overflow-hidden">
-      <div className="px-4 sm:px-6 py-4 border-b border-[#E5E7EB] dark:border-[#3d4a5c]">
+    <section 
+      onClick={handleCardClick}
+      className="glass-card overflow-hidden cursor-pointer hover:shadow-lg hover:shadow-green-500/5 transition-all"
+    >
+      <div className="px-4 sm:px-6 py-4 border-b border-[#E5E7EB] dark:border-[#3d4a5c] pointer-events-none">
         <h2 className="text-base sm:text-lg font-semibold text-[#1F2937] dark:text-[#FFFFFF] flex items-center gap-2">
           <User className="w-5 h-5 text-[#2F8D46] dark:text-[#22C55E] shrink-0" />
           Student Participation Tracker
@@ -418,4 +441,5 @@ export default function ParticipationTracker({
     </section>
   );
 }
+
 

@@ -47,8 +47,8 @@ export default function SettingsPage() {
           <div className="space-y-6">
             
             {/* Personal Details Section */}
-            <section className="bg-white dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] rounded-2xl shadow-sm overflow-hidden">
-              <div className="px-6 py-5 border-b border-[#e4e4e7] dark:border-[#27272a] bg-[#fcfcfc] dark:bg-[#18181b]">
+            <section className="glass-card overflow-hidden">
+              <div className="px-6 py-5 border-b border-white/10 bg-white/5">
                 <h2 className="text-lg font-bold text-[#09090b] dark:text-white">Personal Information</h2>
                 <p className="text-sm text-[#71717a] dark:text-[#a1a1aa] mt-0.5 font-medium">
                   Update your details. These will be displayed on your digital ID.
@@ -71,7 +71,7 @@ export default function SettingsPage() {
                     <label htmlFor="settings-name" className="block text-sm font-semibold text-[#09090b] dark:text-[#f4f4f5]">
                       Full Name
                     </label>
-                    <input id="settings-name" className="w-full bg-white dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] rounded-xl px-4 py-2.5 text-sm text-[#09090b] dark:text-[#f4f4f5] placeholder:text-[#a1a1aa] focus:outline-none focus:ring-2 focus:ring-[#16a34a]/30 focus:border-[#16a34a] transition-all shadow-sm" placeholder="John Doe" defaultValue="Demo User" />
+                    <input id="settings-name" className="w-full gfg-input px-4 py-2.5 text-[#09090b] dark:text-[#f4f4f5] placeholder:text-[#a1a1aa] focus:outline-none focus:ring-2 focus:ring-[#16a34a]/30 focus:border-[#16a34a] transition-all shadow-sm" placeholder="John Doe" defaultValue="Demo User" />
                   </div>
                   <div className="space-y-1.5">
                     <label htmlFor="settings-email" className="block text-sm font-semibold text-[#09090b] dark:text-[#f4f4f5]">
@@ -83,7 +83,7 @@ export default function SettingsPage() {
                     <label htmlFor="settings-dept" className="block text-sm font-semibold text-[#09090b] dark:text-[#f4f4f5]">
                       Department
                     </label>
-                    <select id="settings-dept" className="w-full bg-white dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] rounded-xl px-4 py-2.5 text-sm text-[#09090b] dark:text-[#f4f4f5] focus:outline-none focus:ring-2 focus:ring-[#16a34a]/30 focus:border-[#16a34a] transition-all shadow-sm">
+                    <select id="settings-dept" className="w-full gfg-input px-4 py-2.5 text-[#09090b] dark:text-[#f4f4f5] focus:outline-none focus:ring-2 focus:ring-[#16a34a]/30 focus:border-[#16a34a] transition-all shadow-sm">
                       <option>Computer Science</option>
                       <option>Information Technology</option>
                       <option>Electronics</option>
@@ -93,7 +93,7 @@ export default function SettingsPage() {
                     <label htmlFor="settings-year" className="block text-sm font-semibold text-[#09090b] dark:text-[#f4f4f5]">
                       Year of Study
                     </label>
-                    <select id="settings-year" className="w-full bg-white dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] rounded-xl px-4 py-2.5 text-sm text-[#09090b] dark:text-[#f4f4f5] focus:outline-none focus:ring-2 focus:ring-[#16a34a]/30 focus:border-[#16a34a] transition-all shadow-sm">
+                    <select id="settings-year" className="w-full gfg-input px-4 py-2.5 text-[#09090b] dark:text-[#f4f4f5] focus:outline-none focus:ring-2 focus:ring-[#16a34a]/30 focus:border-[#16a34a] transition-all shadow-sm">
                       <option>1st Year</option>
                       <option>2nd Year</option>
                       <option>3rd Year</option>
@@ -111,15 +111,15 @@ export default function SettingsPage() {
             </section>
 
             {/* Active Sessions Section */}
-            <section className="bg-white dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] rounded-2xl shadow-sm overflow-hidden">
-               <div className="px-6 py-5 border-b border-[#e4e4e7] dark:border-[#27272a] bg-[#fcfcfc] dark:bg-[#18181b]">
+            <section className="glass-card overflow-hidden">
+               <div className="px-6 py-5 border-b border-white/10 bg-white/5">
                 <h2 className="text-lg font-bold text-[#09090b] dark:text-white">Active Sessions</h2>
                 <p className="text-sm text-[#71717a] dark:text-[#a1a1aa] mt-0.5 font-medium">
                   Manage devices currently logged into your account.
                 </p>
               </div>
               <div className="p-6">
-                <div className="flex items-center justify-between p-4 bg-[#f4f4f5] dark:bg-[#27272a]/30 border border-[#e4e4e7] dark:border-[#27272a] rounded-xl">
+                <div className="glass-card-soft flex items-center justify-between p-4">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-white dark:bg-[#18181b] flex items-center justify-center border border-[#e4e4e7] dark:border-[#3f3f46] shadow-sm">
                       <Laptop className="w-5 h-5 text-[#71717a] dark:text-[#a1a1aa]" />
@@ -135,7 +135,7 @@ export default function SettingsPage() {
             </section>
 
             {/* Account Actions Section */}
-            <section className="bg-white dark:bg-[#18181b] border border-red-200 dark:border-red-900/30 rounded-2xl shadow-sm overflow-hidden">
+            <section className="glass-card shadow-lg border-red-200 dark:border-red-900/30 overflow-hidden">
               <div className="px-6 py-5 border-b border-red-100 dark:border-red-900/20 bg-red-50/50 dark:bg-red-950/10">
                 <h2 className="text-lg font-bold text-red-600 dark:text-red-500">Danger Zone</h2>
                 <p className="text-sm text-red-500/80 dark:text-red-400/80 mt-0.5 font-medium">
@@ -168,3 +168,4 @@ export default function SettingsPage() {
     </PageLayout>
   );
 }
+

@@ -1,28 +1,27 @@
 import { Link } from 'react-router-dom';
 
-const Footer = () => {
+interface FooterProps {
+  className?: string;
+}
+
+const Footer = ({ className = '' }: FooterProps) => {
   return (
-    <footer className="gfg-footer">
-      <div className="gfg-footer-inner">
-        <p className="gfg-footer-copyright">
-          © 2026 GeeksforGeeks Campus Club – <span className="gfg-footer-rit">RIT</span> | Made for GfG Challenge
+    <footer className={`w-full py-4 relative z-10 text-center text-sm bg-white/60 dark:bg-[#111113]/70 backdrop-blur-lg text-[#475569] dark:text-[#a1a1aa] border-t border-[#e2e8f0]/50 dark:border-[#3f3f46]/40 transition-colors ${className}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center gap-1.5">
+        <p className="font-medium text-[#0f172a] dark:text-[#fafafa] text-xs sm:text-sm">
+          © {new Date().getFullYear()} GeeksforGeeks Campus Club – <span className="text-[color:var(--gfg-accent)] font-bold">RIT</span> | Made for GfG Challenge
         </p>
-        <p className="gfg-footer-sample text-xs opacity-80 mt-1">
-          Sample data for demonstration. Official GfG Campus Chapter at Rajalakshmi Institute of Technology.
-        </p>
-        <div className="gfg-footer-links">
-          <Link to="/">Home</Link>
-          <Link to="/join">Join</Link>
-          <Link to="/events">Events</Link>
-          <Link to="/resources">Resources</Link>
-          <Link to="/community">Community</Link>
-          <a href="https://www.instagram.com/geeksforgeeks.rit" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a href="https://www.linkedin.com/in/gfg-rit/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <Link to="/contact">Contact</Link>
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#94a3b8] dark:text-[#71717a]">
+          <Link to="/" className="hover:text-[color:var(--gfg-accent)] transition-colors">Home</Link>
+          <Link to="/join" className="hover:text-[color:var(--gfg-accent)] transition-colors">Join</Link>
+          <Link to="/events" className="hover:text-[color:var(--gfg-accent)] transition-colors">Events</Link>
+          <Link to="/resources" className="hover:text-[color:var(--gfg-accent)] transition-colors">Resources</Link>
+          <Link to="/community" className="hover:text-[color:var(--gfg-accent)] transition-colors">Community</Link>
+          <Link to="/contact" className="hover:text-[color:var(--gfg-accent)] transition-colors">Contact</Link>
         </div>
-        <p className="gfg-footer-powered mt-2 text-[11px] opacity-75">
+        <p className="text-[10px] text-[#94a3b8] dark:text-[#71717a]">
           Powered by{' '}
-          <a href="https://www.geeksforgeeks.org/" target="_blank" rel="noopener noreferrer" className="gfg-footer-gfg-link">
+          <a href="https://www.geeksforgeeks.org/" target="_blank" rel="noopener noreferrer" className="text-[color:var(--gfg-accent)] hover:underline font-bold">
             GeeksforGeeks
           </a>
         </p>

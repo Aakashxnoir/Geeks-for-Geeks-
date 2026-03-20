@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Calendar } from 'lucide-react';
 import { getHeatmapForStudent, STUDENTS } from '../../utils/data/communityMockData';
+import { useCardDetail } from '../../lib/context/CardDetailContext';
 
 const INTENSITY = ['bg-[#EBEDF0] dark:bg-[#374151]', 'bg-[#9BE9A8] dark:bg-[#166534]', 'bg-[#40C463] dark:bg-[#15803d]', 'bg-[#30A14E] dark:bg-[#14532d]', 'bg-[#216E39] dark:bg-[#052e16]'];
 
@@ -54,13 +55,36 @@ interface ActivityHeatmapProps {
 }
 
 export default function ActivityHeatmap({ studentId }: ActivityHeatmapProps) {
+  const { showDetails } = useCardDetail();
   const [selectedId, setSelectedId] = useState(studentId ?? STUDENTS[0].id);
   const heatmapData = useMemo(() => getHeatmapForStudent(selectedId), [selectedId]);
   const student = useMemo(() => STUDENTS.find((s) => s.id === selectedId), [selectedId]);
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Prevent trigger when interacting with the select dropdown
+    if ((e.target as HTMLElement).closest('select')) return;
+
+    showDetails({
+      title: "Activity Heatmap Analysis",
+      subtitle: student?.name || "Member Stats",
+      functionality: "Visualizes coding and participation consistency over a rolling 12-week period. Darker green squares represent days with higher contribution volume.",
+      description: `This report details the activity profile for ${student?.name}. It tracks daily updates across the platform, providing a visual 'streak' indicator that helps members maintain momentum and identify their most productive coding days.`,
+      stats: [
+        { label: "Active Weeks", value: "12" },
+        { label: "Max Intensity", value: "Lvl 4" },
+        { label: "Consistency", value: "High" }
+      ],
+      exportData: heatmapData,
+      componentName: "ActivityHeatmap"
+    });
+  };
+
   return (
-    <section className="bg-white dark:bg-[#141922] rounded-xl border border-[#E5E7EB] dark:border-[#3d4a5c] overflow-hidden">
-      <div className="px-4 sm:px-6 py-4 border-b border-[#E5E7EB] dark:border-[#3d4a5c]">
+    <section 
+      onClick={handleCardClick}
+      className="glass-card overflow-hidden cursor-pointer hover:shadow-lg hover:shadow-green-500/5 transition-all"
+    >
+      <div className="px-4 sm:px-6 py-4 border-b border-[#E5E7EB] dark:border-[#3d4a5c] pointer-events-none">
         <h2 className="text-base sm:text-lg font-semibold text-[#1F2937] dark:text-[#FFFFFF] flex items-center gap-2">
           <Calendar className="w-5 h-5 text-[#2F8D46] dark:text-[#22C55E] shrink-0" />
           Activity Heatmap
@@ -87,4 +111,5 @@ export default function ActivityHeatmap({ studentId }: ActivityHeatmapProps) {
     </section>
   );
 }
+
 

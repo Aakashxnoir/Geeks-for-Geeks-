@@ -69,55 +69,34 @@ function CommunityFeaturesInner({ initialSearchQuery = '' }: { initialSearchQuer
         </header>
 
         {globalSearchCategory === 'all' && (
-          <>
-            {/* Row 1: Top Department (wide) | Member of the Month */}
-            <div className="col-span-12 gfg-grid">
-              <div className="col-span-12 lg:col-span-8">
-                <TopDepartmentHighlight />
-              </div>
-              <div className="col-span-12 lg:col-span-4">
-                <MemberOfTheMonthCard />
-              </div>
-            </div>
-
-            {/* Row 1b: Live activity — full width */}
-            <div className="col-span-12">
-              <ActivityFeed />
-            </div>
-
-            {/* Row 2: 4-column widgets */}
-            <div className="col-span-12 gfg-grid">
-              <div className="col-span-12 sm:col-span-6 lg:col-span-3">
+          <div className="col-span-12 gfg-grid">
+            {/* Main Content Area (8/12) */}
+            <div className="col-span-12 lg:col-span-8 space-y-4">
+              {/* Row 1: Top Department */}
+              <TopDepartmentHighlight />
+              
+              {/* Row 2: Widgets Grid */}
+              <div className="gfg-grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <DepartmentLeaderboard />
-              </div>
-              <div className="col-span-12 sm:col-span-6 lg:col-span-3">
                 <CertificateVerification initialCertId={searchForAchievements} />
-              </div>
-              <div className="col-span-12 sm:col-span-6 lg:col-span-3">
                 <SmartParticipationInsights />
-              </div>
-              <div className="col-span-12 sm:col-span-6 lg:col-span-3">
                 <EventRecommendations />
               </div>
-            </div>
 
-            {/* Row 3: Event Management — full width */}
-            <div className="col-span-12">
+              {/* Row 3: Event Management */}
               <EventManagementSection />
-            </div>
 
-            {/* Row 4: Activity Heatmap | Digital Member ID */}
-            <div className="col-span-12 gfg-grid">
-              <div className="col-span-12 lg:col-span-6">
-                <ActivityHeatmap />
+              {/* Row 4: Heatmap & Tracker */}
+              <div className="gfg-grid grid-cols-1 lg:grid-cols-12 gap-4">
+                <div className="lg:col-span-7">
+                  <ActivityHeatmap />
+                </div>
+                <div className="lg:col-span-5">
+                   <DigitalMemberIdCard />
+                </div>
               </div>
-              <div className="col-span-12 lg:col-span-6">
-                <DigitalMemberIdCard />
-              </div>
-            </div>
 
-            {/* Row 5: Participation Tracker — full width */}
-            <div className="col-span-12">
+              {/* Row 5: Participation Tracker */}
               <ParticipationTracker
                 searchQuery={searchForStudents}
                 onSearchQueryChange={(q) => {
@@ -125,153 +104,98 @@ function CommunityFeaturesInner({ initialSearchQuery = '' }: { initialSearchQuer
                   setGlobalSearchCategory('students');
                 }}
               />
+              
+              {/* Row 6: Blog */}
+              <CommunityBlog
+                searchQuery={searchForPosts}
+                onSearchQueryChange={(q) => {
+                  setGlobalSearchQuery(q);
+                  setGlobalSearchCategory('posts');
+                }}
+              />
             </div>
 
-            {/* Row 6: Leaderboards — full width */}
-            <div className="col-span-12">
+            {/* Sidebar Area (4/12) */}
+            <div className="col-span-12 lg:col-span-4 space-y-4">
+              <MemberOfTheMonthCard />
+              <ActivityFeed />
               <Leaderboards />
-            </div>
-
-            {/* Row 7: Blog (2/3) + Sidebar (1/3) */}
-            <div className="col-span-12 gfg-grid">
-              <div className="col-span-12 lg:col-span-8">
-                <CommunityBlog
-                  searchQuery={searchForPosts}
-                  onSearchQueryChange={(q) => {
-                    setGlobalSearchQuery(q);
-                    setGlobalSearchCategory('posts');
-                  }}
-                />
-              </div>
-              <div className="col-span-12 lg:col-span-4 space-y-2 sm:space-y-3">
-                <PersonalizedRecommendations />
-              </div>
-            </div>
-
-            {/* Row 8: Gamification | Member Engagement */}
-            <div className="col-span-12 gfg-grid">
-              <div className="col-span-12 lg:col-span-6">
-                <GamificationSection searchQuery={searchForAchievements} />
-              </div>
-              <div className="col-span-12 lg:col-span-6">
-                <MemberEngagement />
-              </div>
+              <PersonalizedRecommendations />
+              <GamificationSection searchQuery={searchForAchievements} />
+              <MemberEngagement />
             </div>
 
             {/* Row 9: Full Analytics — collapsible */}
-            <CollapsibleSection
-              id="analytics"
-              title="Community Analytics (detailed)"
-              subtitle="Key metrics, growth, and participation overview — click any metric above to jump here"
-              icon={<BarChart3 className="w-5 h-5 text-[#2F8D46] dark:text-[#22C55E]" />}
-              defaultExpanded={false}
-              expanded={analyticsExpanded}
-              onExpandedChange={setAnalyticsExpanded}
-            >
-              <div className="p-3 sm:p-4">
-                <AnalyticsSummary />
-              </div>
-            </CollapsibleSection>
-          </>
+            <div className="col-span-12">
+              <CollapsibleSection
+                id="analytics"
+                title="Community Analytics (detailed)"
+                subtitle="Key metrics, growth, and participation overview — click any metric above to jump here"
+                icon={<BarChart3 className="w-5 h-5 text-[#2F8D46] dark:text-[#22C55E]" />}
+                defaultExpanded={false}
+                expanded={analyticsExpanded}
+                onExpandedChange={setAnalyticsExpanded}
+              >
+                <div className="p-3 sm:p-4">
+                  <AnalyticsSummary />
+                </div>
+              </CollapsibleSection>
+            </div>
+          </div>
         )}
 
         {globalSearchCategory === 'students' && (
-          <>
-            <div className="col-span-12 gfg-grid">
-              <div className="col-span-12 lg:col-span-8">
-                <TopDepartmentHighlight />
-              </div>
-              <div className="col-span-12 lg:col-span-4">
-                <MemberOfTheMonthCard />
-              </div>
-            </div>
-            <div className="col-span-12">
-              <ActivityFeed />
-            </div>
-            <div className="col-span-12 gfg-grid">
-              <div className="col-span-12 lg:col-span-6">
-                <DepartmentLeaderboard />
-              </div>
-              <div className="col-span-12 lg:col-span-6">
-                <SmartParticipationInsights />
-              </div>
-            </div>
-            <div className="col-span-12 gfg-grid">
-              <div className="col-span-12 lg:col-span-6">
-                <ActivityHeatmap />
-              </div>
-              <div className="col-span-12 lg:col-span-6">
-                <DigitalMemberIdCard />
-              </div>
-            </div>
-            <div className="col-span-12">
-              <ParticipationTracker
+          <div className="col-span-12 gfg-grid">
+            <div className="col-span-12 lg:col-span-8 space-y-4">
+               <TopDepartmentHighlight />
+               <ParticipationTracker
                 searchQuery={searchForStudents}
                 onSearchQueryChange={(q) => {
                   setGlobalSearchQuery(q);
                   setGlobalSearchCategory('students');
                 }}
               />
-            </div>
-            <div className="col-span-12">
               <Leaderboards />
             </div>
-            <CollapsibleSection
-              id="analytics"
-              title="Community Analytics (detailed)"
-              subtitle="Key metrics and participation overview"
-              icon={<BarChart3 className="w-5 h-5 text-[#2F8D46] dark:text-[#22C55E]" />}
-              defaultExpanded={false}
-              expanded={analyticsExpanded}
-              onExpandedChange={setAnalyticsExpanded}
-            >
-              <div className="p-3 sm:p-4">
-                <AnalyticsSummary />
-              </div>
-            </CollapsibleSection>
-          </>
+            <div className="col-span-12 lg:col-span-4 space-y-4">
+              <MemberOfTheMonthCard />
+              <ActivityFeed />
+              <SmartParticipationInsights />
+              <DigitalMemberIdCard />
+            </div>
+          </div>
         )}
 
         {globalSearchCategory === 'posts' && (
-          <>
-            <div className="col-span-12 gfg-grid">
-              <div className="col-span-12 lg:col-span-8">
-                <CommunityBlog
-                  searchQuery={searchForPosts}
-                  onSearchQueryChange={(q) => {
-                    setGlobalSearchQuery(q);
-                    setGlobalSearchCategory('posts');
-                  }}
-                />
-              </div>
-              <div className="col-span-12 lg:col-span-4 space-y-2 sm:space-y-3">
-                <ActivityFeed />
-                <PersonalizedRecommendations />
-                <MemberEngagement />
-              </div>
+          <div className="col-span-12 gfg-grid">
+            <div className="col-span-12 lg:col-span-8 space-y-4">
+              <CommunityBlog
+                searchQuery={searchForPosts}
+                onSearchQueryChange={(q) => {
+                  setGlobalSearchQuery(q);
+                  setGlobalSearchCategory('posts');
+                }}
+              />
             </div>
-          </>
+            <div className="col-span-12 lg:col-span-4 space-y-4">
+              <ActivityFeed />
+              <PersonalizedRecommendations />
+              <MemberEngagement />
+            </div>
+          </div>
         )}
 
         {globalSearchCategory === 'achievements' && (
-          <>
-            <div className="col-span-12 gfg-grid">
-              <div className="col-span-12 lg:col-span-6">
-                <MemberOfTheMonthCard />
-              </div>
-              <div className="col-span-12 lg:col-span-6">
-                <GamificationSection searchQuery={searchForAchievements} />
-              </div>
+          <div className="col-span-12 gfg-grid">
+            <div className="col-span-12 lg:col-span-8 space-y-4">
+               <GamificationSection searchQuery={searchForAchievements} />
+               <CertificateVerification initialCertId={searchForAchievements} />
             </div>
-            <div className="col-span-12 gfg-grid">
-              <div className="col-span-12 lg:col-span-6">
-                <CertificateVerification initialCertId={searchForAchievements} />
-              </div>
-              <div className="col-span-12 lg:col-span-6">
-                <EventRecommendations />
-              </div>
+            <div className="col-span-12 lg:col-span-4 space-y-4">
+              <MemberOfTheMonthCard />
+              <EventRecommendations />
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

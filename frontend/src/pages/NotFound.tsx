@@ -26,13 +26,13 @@ export default function NotFound() {
           </Link>
           <Link
             to="/events"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium border border-[#E5E7EB] dark:border-[#30363d] text-[#111827] dark:text-white hover:bg-[#F9FAFB] dark:hover:bg-[#161b22] transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium border border-white/20 dark:border-white/10 text-[color:var(--gfg-text-primary)] dark:text-white hover:bg-white/15 dark:hover:bg-white/10 backdrop-blur-sm transition-all"
           >
             View Events
           </Link>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium border border-[#E5E7EB] dark:border-[#30363d] text-[#111827] dark:text-white hover:bg-[#F9FAFB] dark:hover:bg-[#161b22] transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium border border-white/20 dark:border-white/10 text-[color:var(--gfg-text-primary)] dark:text-white hover:bg-white/15 dark:hover:bg-white/10 backdrop-blur-sm transition-all"
           >
             Contact
           </Link>
@@ -41,3 +41,4 @@ export default function NotFound() {
     </div>
   );
 }
+

@@ -113,7 +113,7 @@ export default function SignUp() {
               <input
                 id="signup-name"
                 type="text"
-                className="w-full bg-white dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] rounded-xl px-4 py-3 text-sm text-[#09090b] dark:text-[#f4f4f5] placeholder:text-[#a1a1aa] focus:outline-none focus:ring-2 focus:ring-[#16a34a]/30 focus:border-[#16a34a] transition-all shadow-sm"
+                className="gfg-input px-4 py-3 shadow-sm"
                 placeholder="John Doe"
                 autoComplete="name"
                 value={name}
@@ -128,7 +128,7 @@ export default function SignUp() {
               <input
                 id="signup-email"
                 type="email"
-                className="w-full bg-white dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] rounded-xl px-4 py-3 text-sm text-[#09090b] dark:text-[#f4f4f5] placeholder:text-[#a1a1aa] focus:outline-none focus:ring-2 focus:ring-[#16a34a]/30 focus:border-[#16a34a] transition-all shadow-sm"
+                className="gfg-input px-4 py-3 shadow-sm"
                 placeholder="you@rit.edu.in"
                 autoComplete="email"
                 value={email}
@@ -189,3 +189,4 @@ export default function SignUp() {
     </div>
   );
 }
+

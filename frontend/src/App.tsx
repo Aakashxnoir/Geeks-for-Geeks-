@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { SiteThemeProvider } from './lib/context/SiteThemeContext';
 import { AuthProvider, useAuth } from './lib/context/AuthContext';
 import { SearchProvider } from './lib/context/SearchContext';
-import Navbar from './components/layout/Navbar';
+import TopBar from './components/layout/TopBar';
+import Sidebar from './components/layout/Sidebar';
 import Footer from './components/layout/Footer';
 import BackToTop from './components/layout/BackToTop';
 import ClubInfo from './components/layout/ClubInfo';
@@ -16,14 +17,17 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import SettingsPage from './pages/Settings';
 import CommunityPage from './pages/CommunityPage';
-import Dashboard from './pages/Dashboard';
 import Join from './pages/Join';
 import NotFound from './pages/NotFound';
+import { CardDetailModal } from './components/ui/CardDetailModal';
+import { CardDetailProvider } from './lib/context/CardDetailContext';
+import BottomNav from './components/layout/BottomNav';
 
 function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: () => void }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const location = useLocation();
   const isAuthRoute = location.pathname === '/signin' || location.pathname === '/signup';
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const RequireAuth = ({ children }: { children: React.ReactNode }) => {
     if (!isAuthenticated) {
@@ -33,9 +37,26 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
   };
 
   return (
-    <>
-      {!isAuthRoute && <Navbar darkMode={darkMode} onToggleDarkMode={toggleTheme} />}
-      <main className="gfg-main" id="gfg-main-content" style={{ flex: 1 }}>
+    <div className="flex flex-col min-h-screen w-full relative">
+      {!isAuthRoute && (
+        <>
+          <Sidebar 
+            isOpen={sidebarOpen} 
+            onClose={() => setSidebarOpen(false)} 
+            isAuthenticated={isAuthenticated}
+            logout={logout}
+            darkMode={darkMode}
+            onToggleDarkMode={toggleTheme}
+          />
+          <TopBar 
+            darkMode={darkMode} 
+            onToggleDarkMode={toggleTheme} 
+            onOpenSidebar={() => setSidebarOpen(true)}
+          />
+          <BottomNav />
+        </>
+      )}
+      <main className={`gfg-main flex-grow w-full transition-all duration-300 ${!isAuthRoute ? 'pt-16 sm:pt-20' : ''}`} id="gfg-main-content">
         <Routes>
           <Route
             path="/signin"
@@ -65,7 +86,7 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
             path="/dashboard"
             element={
               <RequireAuth>
-                <Dashboard />
+                <Navigate to="/" replace />
               </RequireAuth>
             }
           />
@@ -129,21 +150,27 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
         </Routes>
       </main>
       {!isAuthRoute && <Footer />}
-    </>
+      
+      {/* Spacer for mobile BottomNav to prevent obscuring the footer */}
+      {!isAuthRoute && <div className="h-20 lg:hidden w-full shrink-0" />}
+
+      <BackToTop />
+    </div>
   );
 }
 
 function AppContent() {
   const [darkMode, setDarkMode] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem('gfg-dark') ?? 'false');
+      const saved = localStorage.getItem('gfg-dark');
+      return saved ? JSON.parse(saved) : false;
     } catch {
       return false;
     }
   });
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark-mode', darkMode);
+    document.documentElement.classList.toggle('dark', darkMode);
     try {
       localStorage.setItem('gfg-dark', JSON.stringify(darkMode));
     } catch {}
@@ -158,13 +185,16 @@ function AppContent() {
   const toggleTheme = () => setDarkMode((v) => !v);
 
   return (
-    <SiteThemeProvider isDark={darkMode} onToggle={toggleTheme}>
-      <AuthProvider>
-        <SearchProvider>
-          <AppRoutes darkMode={darkMode} toggleTheme={toggleTheme} />
-        </SearchProvider>
-      </AuthProvider>
-    </SiteThemeProvider>
+    <CardDetailProvider>
+      <SiteThemeProvider isDark={darkMode} onToggle={toggleTheme}>
+        <AuthProvider>
+          <SearchProvider>
+            <AppRoutes darkMode={darkMode} toggleTheme={toggleTheme} />
+            <CardDetailModal />
+          </SearchProvider>
+        </AuthProvider>
+      </SiteThemeProvider>
+    </CardDetailProvider>
   );
 }
 

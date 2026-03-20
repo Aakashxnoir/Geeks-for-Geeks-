@@ -152,7 +152,7 @@ const Contact = () => {
   }, [chatMessages]);
 
   const inputClass =
-    'w-full pl-10 pr-4 py-3 rounded-xl border bg-[#FFFFFF] dark:bg-[#0d1117] text-[#1F2937] dark:text-[#FFFFFF] placeholder:text-[#6B7280] dark:placeholder:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F8D46]/30 dark:focus-visible:ring-[#22C55E]/50 border-[#E5E7EB] dark:border-[#30363d] focus:border-[#2F8D46] dark:focus:border-[#22C55E] transition-colors';
+    'w-full pl-10 pr-4 py-3 rounded-xl border bg-[#FFFFFF] dark:bg-[#18181b] text-[#1F2937] dark:text-[#FFFFFF] placeholder:text-[#6B7280] dark:placeholder:text-[#71717a] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F8D46]/30 dark:focus-visible:ring-[#22C55E]/50 border-[#E5E7EB] dark:border-[#3f3f46] focus:border-[#2F8D46] dark:focus:border-[#22C55E] transition-colors';
   const inputErrorClass = 'border-red-500 dark:border-red-400';
 
   return (
@@ -205,7 +205,7 @@ const Contact = () => {
           {CONTACT_STATS.map((item, i) => (
             <div
               key={item.label}
-              className="flex flex-col items-center p-4 rounded-lg bg-[#F9FAFB] dark:bg-[#1c212e] border border-[#E5E7EB] dark:border-[#30363d]"
+              className="flex flex-col items-center p-4 rounded-lg bg-[#F9FAFB] dark:bg-[#18181b] border border-[#E5E7EB] dark:border-[#3f3f46]"
             >
               <span className="text-xl font-bold tabular-nums text-[#2F8D46] dark:!text-[#FFFFFF]">
                 {statValues[i]}
@@ -220,7 +220,7 @@ const Contact = () => {
 
       {/* 2. Send a message (primary) + FAQ — side by side; form is main CTA */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6" aria-labelledby="form-faq-heading">
-        <div className="bg-white dark:bg-[#161b22] rounded-xl border border-[#E5E7EB] dark:border-[#30363d] p-4 sm:p-6 order-2 lg:order-1">
+        <div className="glass-card p-4 sm:p-6 order-2 lg:order-1">
           <h2 id="form-faq-heading" className="text-base sm:text-lg font-bold text-[#1F2937] dark:text-[#FFFFFF] mb-4">
             Send a message
           </h2>
@@ -353,18 +353,18 @@ const Contact = () => {
           </form>
         </div>
 
-        <div className="bg-white dark:bg-[#161b22] rounded-xl border border-[#E5E7EB] dark:border-[#30363d] p-4 sm:p-6 order-1 lg:order-2">
+        <div className="glass-card p-4 sm:p-6 order-1 lg:order-2">
           <h3 className="text-base sm:text-lg font-bold text-[#1F2937] dark:text-[#FFFFFF] mb-4">FAQ</h3>
           <div className="space-y-2">
             {FAQ_ITEMS.map((item, i) => (
               <div
                 key={i}
-                className="rounded-lg border border-[#E5E7EB] dark:border-[#30363d] overflow-hidden"
+                className="rounded-lg border border-[#E5E7EB] dark:border-[#3f3f46] overflow-hidden"
               >
                 <button
                   type="button"
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full px-4 py-3 text-left text-sm font-semibold text-[#1F2937] dark:text-[#FFFFFF] bg-[#F9FAFB] dark:bg-[#1c212e] hover:bg-[#F0FDF4] dark:hover:bg-[rgba(34,197,94,0.12)] transition-colors flex justify-between items-center gap-2"
+                  className="w-full px-4 py-3 text-left text-sm font-semibold text-[#1F2937] dark:text-[#FFFFFF] bg-[#F9FAFB] dark:bg-[#18181b] hover:bg-[#F0FDF4] dark:hover:bg-[rgba(34,197,94,0.12)] transition-colors flex justify-between items-center gap-2"
                   aria-expanded={openFaq === i}
                 >
                   {item.q}
@@ -374,7 +374,7 @@ const Contact = () => {
                   />
                 </button>
                 {openFaq === i && (
-                  <div className="px-4 pb-3 text-sm text-[#4B5563] dark:text-white border-t border-[#E5E7EB] dark:border-[#30363d] pt-2">
+                  <div className="px-4 pb-3 text-sm text-[#4B5563] dark:text-white border-t border-[#E5E7EB] dark:border-[#3f3f46] pt-2">
                     {item.a}
                   </div>
                 )}
@@ -385,7 +385,7 @@ const Contact = () => {
       </section>
 
       {/* 3. Team Contact — who to reach */}
-      <section className="bg-white dark:bg-[#161b22] rounded-xl border border-[#E5E7EB] dark:border-[#30363d] p-4 sm:p-6" aria-labelledby="team-contact-heading">
+      <section className="glass-card p-4 sm:p-6" aria-labelledby="team-contact-heading">
         <h2 id="team-contact-heading" className="text-base sm:text-lg font-bold text-[#1F2937] dark:text-[#FFFFFF] mb-4">
           Team Contact
         </h2>
@@ -393,7 +393,7 @@ const Contact = () => {
           {TEAM_CONTACTS.map((person) => (
             <article
               key={person.name}
-              className="p-4 rounded-lg border border-[#E5E7EB] dark:border-[#30363d] bg-[#F9FAFB] dark:bg-[#0d1117] hover:border-[#2F8D46] dark:hover:border-[#22C55E] transition-colors"
+              className="p-4 rounded-lg border border-[#E5E7EB] dark:border-[#3f3f46] bg-[#F9FAFB] dark:bg-[#18181b] hover:border-[#2F8D46] dark:hover:border-[#22C55E] transition-colors"
             >
               <p className="font-semibold text-sm text-[#1F2937] dark:text-[#FFFFFF]">{person.name}</p>
               <p className="text-xs text-[#2F8D46] dark:text-[#22C55E] font-medium mt-0.5">{person.role}</p>
@@ -427,7 +427,7 @@ const Contact = () => {
       </section>
 
       {/* 4. Find us (map) — full width first for visibility */}
-      <section className="bg-white dark:bg-[#161b22] rounded-xl border border-[#E5E7EB] dark:border-[#30363d] p-4 sm:p-6 overflow-hidden" aria-labelledby="find-us-heading">
+      <section className="glass-card p-4 sm:p-6 overflow-hidden" aria-labelledby="find-us-heading">
         <h2 id="find-us-heading" className="text-base sm:text-lg font-bold text-[#1F2937] dark:text-[#FFFFFF] mb-2">
           Find us
         </h2>
@@ -497,8 +497,8 @@ const Contact = () => {
       {/* Chatbot float — answers questions about the website */}
       <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-2" aria-label="Website assistant">
         {floatOpen && (
-          <div className="w-[340px] sm:w-[380px] rounded-xl border border-[#E5E7EB] dark:border-[#30363d] bg-white dark:bg-[#161b22] shadow-xl overflow-hidden flex flex-col max-h-[420px]">
-            <div className="px-4 py-3 border-b border-[#E5E7EB] dark:border-[#30363d] bg-[#F9FAFB] dark:bg-[#0d1117] flex items-center gap-2">
+          <div className="w-[340px] sm:w-[380px] rounded-xl border border-[#E5E7EB] dark:border-[#3f3f46] bg-white dark:bg-[#18181b] shadow-xl overflow-hidden flex flex-col max-h-[420px]">
+            <div className="px-4 py-3 border-b border-[#E5E7EB] dark:border-[#3f3f46] bg-[#F9FAFB] dark:bg-[#111113] flex items-center gap-2">
               <span className="w-8 h-8 rounded-lg bg-[#2F8D46] dark:bg-[#22C55E] flex items-center justify-center text-white">
                 <Bot className="w-4 h-4" aria-hidden />
               </span>
@@ -514,7 +514,7 @@ const Contact = () => {
                     className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
                       msg.role === 'user'
                         ? 'bg-[#2F8D46] dark:bg-[#22C55E] text-white'
-                        : 'bg-[#E5E7EB] dark:bg-[#1c212e] text-[#1F2937] dark:!text-[#FFFFFF]'
+                        : 'bg-[#E5E7EB] dark:bg-[#27272a] text-[#1F2937] dark:!text-[#FFFFFF]'
                     }`}
                   >
                     {msg.text}
@@ -523,14 +523,14 @@ const Contact = () => {
               ))}
               <div ref={chatEndRef} />
             </div>
-            <div className="p-3 border-t border-[#E5E7EB] dark:border-[#30363d] flex gap-2">
+            <div className="p-3 border-t border-[#E5E7EB] dark:border-[#3f3f46] flex gap-2">
               <input
                 type="text"
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && sendChatMessage()}
                 placeholder="Ask about the club, events, resources..."
-                className="flex-1 rounded-lg border border-[#E5E7EB] dark:border-[#3d4a5c] bg-[#F9FAFB] dark:bg-[#0d1117] text-[#1F2937] dark:!text-[#FFFFFF] placeholder-[#9CA3AF] dark:placeholder-[#FFFFFF] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2F8D46] dark:focus:ring-[#22C55E]"
+                className="flex-1 rounded-lg border border-[#E5E7EB] dark:border-[#3f3f46] bg-[#F9FAFB] dark:bg-[#111113] text-[#1F2937] dark:!text-[#FFFFFF] placeholder-[#9CA3AF] dark:placeholder-[#71717a] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2F8D46] dark:focus:ring-[#22C55E]"
                 aria-label="Ask a question"
               />
               <button
@@ -568,3 +568,4 @@ const Contact = () => {
 };
 
 export default Contact;
+

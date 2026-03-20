@@ -6,34 +6,38 @@ import {
   Wrench,
   Code2,
   Award,
-  Trophy,
   ChevronRight,
   Mail,
-  Sparkles,
-  Network,
-  Briefcase,
-  Globe,
+  LayoutDashboard,
 } from 'lucide-react';
 import {
   HERO,
   ABOUT_SNAPSHOT,
   STATS,
-  STATS_AS_OF,
   WHY_JOIN,
   CTA_BANNER,
-  COMMUNITY_TEASER,
-  FEATURED_BLOG,
   CONTACT_PREVIEW,
   HERO_MOVING_TITLES,
   HERO_FEATURE_CARDS,
 } from '../utils/data/homePageData';
 import { UPCOMING_EVENTS } from '../utils/data/eventsData';
 import { RESOURCES } from '../utils/data/resourcesData';
+import {
+  CommunityThemeProvider,
+  DigitalMemberIdCard,
+  SmartParticipationInsights,
+  ActivityHeatmap,
+  PersonalizedRecommendations,
+  ParticipationTracker,
+  AnalyticsSummary,
+} from '../features/community';
+import { BarChart3 } from 'lucide-react';
+import { useCardDetail } from '../lib/context/CardDetailContext';
 
 const upcomingPreview = Array.isArray(UPCOMING_EVENTS) ? UPCOMING_EVENTS.slice(0, 3) : [];
 const resourcesPreview = Array.isArray(RESOURCES) ? RESOURCES.slice(0, 4) : [];
 
-const statIcons = {
+const statIcons: Record<string, React.ElementType> = {
   members: Users,
   events: Calendar,
   workshops: Wrench,
@@ -41,8 +45,17 @@ const statIcons = {
   contributors: Award,
 };
 
-export default function Home() {
+function HomeInner() {
   const { isDark } = useSiteTheme();
+  const { showDetails } = useCardDetail();
+
+  const handleFeatureClick = (_card: typeof HERO_FEATURE_CARDS[0]) => {
+    // Info integrated directly into cards — no popup
+  };
+
+  const handleStatClick = (_stat: typeof STATS[0]) => {
+    // Info displayed directly in stat card — no popup
+  };
 
   return (
     <div
@@ -52,9 +65,10 @@ export default function Home() {
       ].join(' ')}
     >
       <div className="gfg-shell gfg-grid">
-        {/* ─── 1. HERO SECTION ───────────────────────── */}
+
+        {/* ─── 1. HERO ──────────────────────────────── */}
         <section
-          className="col-span-12 relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#2F8D46] to-[#14532d] dark:from-[#0a1f0d] dark:to-[#052E16] px-6 sm:px-10 py-10 sm:py-14 shadow-lg"
+          className={`col-span-12 relative rounded-2xl overflow-hidden px-6 sm:px-10 py-8 sm:py-12 shadow-lg gfg-hero-section ${isDark ? '!bg-[#09090b] !bg-none border border-[#27272a]' : 'bg-gradient-to-br from-[#2F8D46] to-[#14532d]'}`}
           aria-labelledby="hero-heading"
         >
           <h1
@@ -63,12 +77,10 @@ export default function Home() {
           >
             {HERO.title}
           </h1>
-
-          <p className="text-base sm:text-lg !text-white font-medium mb-6 !opacity-100">
+          <p className="text-base sm:text-lg !text-white font-medium mb-4 !opacity-100">
             {HERO.subtitle}
           </p>
-
-          <p className="text-sm sm:text-base !text-white max-w-2xl mb-8 !opacity-90">
+          <p className="text-sm sm:text-base !text-white max-w-2xl mb-6 !opacity-90">
             {HERO.tagline}
           </p>
 
@@ -96,9 +108,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ─── 2. WHAT WE DO ────────────────────────────────────────────── */}
+        {/* ─── 2. WHAT WE DO ──────────────────────────── */}
         <section
-          className="col-span-12 glass-panel p-6 sm:p-8"
+          className="col-span-12 glass-panel p-5 sm:p-6"
           aria-labelledby="what-we-do-heading"
         >
           <h2 id="what-we-do-heading" className="text-lg sm:text-xl font-bold text-[#111827] dark:text-white mb-2">
@@ -111,12 +123,13 @@ export default function Home() {
             {HERO_FEATURE_CARDS.map((card) => (
               <div
                 key={card.title}
-                className="col-span-12 sm:col-span-6 lg:col-span-3 glass-card group p-5"
+                onClick={() => handleFeatureClick(card)}
+                className="col-span-12 sm:col-span-6 lg:col-span-3 glass-card group p-5 cursor-pointer hover:ring-2 hover:ring-[color:var(--gfg-accent)] active:scale-[0.98] transition-all"
               >
-                <h3 className="text-base sm:text-lg font-bold text-[#020617] dark:text-white group-hover:text-[#22C55E] transition-colors">
+                <h3 className="text-base sm:text-lg font-bold text-[#020617] dark:text-white group-hover:text-[#22C55E] transition-colors pointer-events-none">
                   {card.title}
                 </h3>
-                <p className="text-sm text-[#111827] dark:text-white/85 mt-2 max-w-xs">
+                <p className="text-sm text-[#111827] dark:text-white/85 mt-2 max-w-xs pointer-events-none">
                   {card.short}
                 </p>
               </div>
@@ -124,7 +137,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ─── 3. KEY STATISTICS ──────────────────────────────────── */}
+        {/* ─── 3. STATS ──────────────────────────── */}
         <section aria-labelledby="stats-heading" className="col-span-12 gfg-grid">
           <h2 id="stats-heading" className="sr-only">Key statistics</h2>
           {STATS.map((stat) => {
@@ -132,15 +145,16 @@ export default function Home() {
             return (
               <div
                 key={stat.label}
-                className="col-span-12 sm:col-span-6 lg:col-span-2 glass-card flex flex-col items-center justify-center text-center p-6"
+                onClick={() => handleStatClick(stat)}
+                className="col-span-12 sm:col-span-6 lg:col-span-2 glass-card flex flex-col items-center justify-center text-center p-6 cursor-pointer hover:shadow-lg hover:shadow-[color:var(--gfg-accent)]/5 active:scale-[0.98] transition-all"
               >
-                <span className="text-[#2F8D46] dark:text-[#22C55E] mb-2">
+                <span className="text-[#2F8D46] dark:text-[#22C55E] mb-2 pointer-events-none">
                   <Icon className="w-6 h-6 sm:w-7 sm:h-7" aria-hidden />
                 </span>
-                <span className="text-xl sm:text-2xl font-bold text-[#111827] dark:text-white">
+                <span className="text-xl sm:text-2xl font-bold text-[#111827] dark:text-white pointer-events-none">
                   {stat.value}
                 </span>
-                <span className="text-xs sm:text-sm text-[#4B5563] dark:text-white/70 mt-1 font-medium">
+                <span className="text-xs sm:text-sm text-[#4B5563] dark:text-white/70 mt-1 font-medium pointer-events-none">
                   {stat.label}
                 </span>
               </div>
@@ -148,14 +162,134 @@ export default function Home() {
           })}
         </section>
 
-        {/* ─── 4-9 Sections (Kept standard to match your UI) ──────────────── */}
-        {/* ... [Rest of your sections 4 through 9 remain standard] ... */}
-        {/* [I have omitted them here for brevity, but keep them as they were in your file] */}
+        {/* ─── 4. UPCOMING EVENTS PREVIEW ──────────────────────────── */}
+        {upcomingPreview.length > 0 && (
+          <section className="col-span-12 glass-panel p-5 sm:p-6" aria-labelledby="events-preview-heading">
+            <div className="flex items-center justify-between mb-4">
+              <h2 id="events-preview-heading" className="text-lg sm:text-xl font-bold text-[#111827] dark:text-white flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-[#2F8D46] dark:text-[#22C55E]" aria-hidden />
+                Upcoming Events
+              </h2>
+              <Link to="/events" className="text-sm font-semibold text-[#2F8D46] dark:text-[#22C55E] hover:underline flex items-center gap-1">
+                View all <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
+            <div className="gfg-grid">
+              {upcomingPreview.map((ev) => (
+                <div key={ev.id} className="col-span-12 sm:col-span-6 lg:col-span-4 glass-card p-5 group">
+                  <span className="inline-block text-xs font-semibold text-[#2F8D46] dark:text-[#22C55E] bg-[#f0fdf4] dark:bg-[rgba(34,197,94,0.12)] px-2.5 py-1 rounded-full mb-3">
+                    {ev.type}
+                  </span>
+                  <h3 className="font-bold text-[#111827] dark:text-white text-sm sm:text-base group-hover:text-[#22C55E] transition-colors">
+                    {ev.title}
+                  </h3>
+                  <p className="text-xs text-[#4B5563] dark:text-white/70 mt-1">{ev.date} · {ev.venue}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
-        {/* ─── 10. FINAL JOIN CARD ───────────────────── */}
+        {/* ─── 5. RESOURCES PREVIEW ──────────────────────────── */}
+        {resourcesPreview.length > 0 && (
+          <section className="col-span-12 glass-panel p-5 sm:p-6" aria-labelledby="resources-preview-heading">
+            <div className="flex items-center justify-between mb-4">
+              <h2 id="resources-preview-heading" className="text-lg sm:text-xl font-bold text-[#111827] dark:text-white flex items-center gap-2">
+                <Wrench className="w-5 h-5 text-[#2F8D46] dark:text-[#22C55E]" aria-hidden />
+                Resources
+              </h2>
+              <Link to="/resources" className="text-sm font-semibold text-[#2F8D46] dark:text-[#22C55E] hover:underline flex items-center gap-1">
+                See all <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
+            <div className="gfg-grid">
+              {resourcesPreview.map((res) => (
+                <div key={res.title} className="col-span-12 sm:col-span-6 lg:col-span-3 glass-card p-5 group">
+                  <h3 className="font-bold text-[#111827] dark:text-white text-sm group-hover:text-[#22C55E] transition-colors">
+                    {res.title}
+                  </h3>
+                  <p className="text-xs text-[#4B5563] dark:text-white/70 mt-1 line-clamp-2">{res.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ─── 6. WHY JOIN ──────────────────────────── */}
+        {WHY_JOIN && WHY_JOIN.length > 0 && (
+          <section className="col-span-12 glass-panel p-5 sm:p-6" aria-labelledby="why-join-heading">
+            <h2 id="why-join-heading" className="text-lg sm:text-xl font-bold text-[#111827] dark:text-white mb-4">
+              Why join GFG @ RIT?
+            </h2>
+            <div className="gfg-grid">
+              {WHY_JOIN.map((item) => (
+                <div key={item.title} className="col-span-12 sm:col-span-6 lg:col-span-4 glass-card p-5 group">
+                  <h3 className="font-bold text-[#020617] dark:text-white text-sm sm:text-base group-hover:text-[#22C55E] transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-[#4B5563] dark:text-white/80 mt-2 leading-relaxed">
+                    {item.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ═══════════════════════════════════════════════════
+            DASHBOARD SECTION — Personal tracking & analytics
+            ═══════════════════════════════════════════════════ */}
+        <div className="col-span-12">
+          <div className="flex items-center gap-3 mb-4 mt-2">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#2F8D46] to-[#14532d] flex items-center justify-center">
+              <LayoutDashboard className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg sm:text-xl font-bold text-[#111827] dark:text-white">My Dashboard</h2>
+              <p className="text-sm text-[#4B5563] dark:text-white/70">Track your progress, certificates, and activity</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Row D1: Member ID + Insights */}
+        <div className="col-span-12 lg:col-span-6">
+          <DigitalMemberIdCard />
+        </div>
+        <div className="col-span-12 lg:col-span-6 flex flex-col gap-[var(--gfg-grid-gap)]">
+          <SmartParticipationInsights />
+          <PersonalizedRecommendations />
+        </div>
+
+        {/* Row D2: Activity Heatmap */}
+        <div className="col-span-12">
+          <ActivityHeatmap />
+        </div>
+
+        {/* Row D3: Participation Tracker */}
+        <div className="col-span-12">
+          <ParticipationTracker searchQuery="" onSearchQueryChange={() => {}} />
+        </div>
+
+        {/* Row D4: Platform Analytics */}
+        <div className="col-span-12 glass-card shadow-lg z-10">
+          <div className="px-6 py-5 border-b border-[#e4e4e7] dark:border-[#3d4a5c] bg-white/40 dark:bg-white/5 flex items-center gap-3 rounded-t-[var(--gfg-radius-lg)]">
+            <BarChart3 className="w-5 h-5 text-[#2F8D46] dark:text-[#22C55E]" />
+            <div>
+              <h2 className="text-lg font-bold text-[#09090b] dark:text-white">Platform Overview</h2>
+              <p className="text-sm text-[#71717a] dark:text-[#a1a1aa] mt-0.5 font-medium">
+                Key metrics and platform growth
+              </p>
+            </div>
+          </div>
+          <div className="p-4 sm:p-6">
+            <AnalyticsSummary />
+          </div>
+        </div>
+
+        {/* ─── FINAL CTA ──────────────────────────── */}
         <section
-          className="col-span-12 rounded-2xl overflow-hidden bg-gradient-to-br from-[#14532d] to-[#0f2d1a] dark:from-[#0a1f0d] dark:to-[#052E16] px-6 sm:px-10 pt-6 sm:pt-8 pb-10 sm:pb-12 text-left shadow-xl"
-          aria-labelledby="join-card-heading"
+          className={`col-span-12 rounded-2xl overflow-hidden px-6 sm:px-10 pt-6 sm:pt-8 pb-8 sm:pb-10 text-left shadow-xl ${isDark ? '!bg-[#09090b] !bg-none border border-[#27272a]' : 'bg-gradient-to-br from-[#14532d] to-[#0f2d1a]'}`}
+          aria-labelledby="cta-section-heading"
         >
           <div className="flex flex-wrap items-center justify-between gap-2 pb-6 sm:pb-8 mb-6 sm:mb-8 border-b border-white/25">
             <div>
@@ -185,16 +319,14 @@ export default function Home() {
           <p className="text-sm font-medium !text-white mb-1">
             {HERO.subtitle}
           </p>
-          <h2 id="join-card-heading" className="text-2xl sm:text-3xl font-bold tracking-tight !text-white">
+          <h2 id="cta-section-heading" className="text-2xl sm:text-3xl font-bold tracking-tight !text-white">
             {HERO.title}
           </h2>
-          <p className="text-lg sm:text-xl !text-white mt-1">
-            {HERO.tagline}
-          </p>
+          <p className="text-lg sm:text-xl !text-white mt-1">{HERO.tagline}</p>
           <p className="text-sm sm:text-base !text-white mt-4 max-w-2xl leading-relaxed !opacity-90">
             {HERO.description}
           </p>
-          
+
           <div className="flex flex-wrap gap-3 mt-6 sm:mt-8">
             <Link to="/community" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium bg-white/20 hover:bg-white/30 !text-white border border-white/40 transition-colors">
               Explore Community <ChevronRight className="w-4 h-4" />
@@ -210,5 +342,15 @@ export default function Home() {
 
       </div>
     </div>
+  );
+}
+
+export default function Home() {
+  const { isDark } = useSiteTheme();
+
+  return (
+    <CommunityThemeProvider controlledTheme={isDark ? 'dark' : 'light'}>
+      <HomeInner />
+    </CommunityThemeProvider>
   );
 }

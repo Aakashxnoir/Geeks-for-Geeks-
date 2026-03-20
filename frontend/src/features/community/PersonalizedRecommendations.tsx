@@ -16,7 +16,7 @@ export default function PersonalizedRecommendations() {
   if (recommendations.length === 0) return null;
 
   return (
-    <section className="bg-white dark:bg-[#141922] rounded-xl border border-[#E5E7EB] dark:border-[#3d4a5c] overflow-hidden">
+    <section className="glass-card overflow-hidden">
       <div className="px-4 py-3 border-b border-[#E5E7EB] dark:border-[#3d4a5c] flex items-center gap-2">
         <Lightbulb className="w-4 h-4 text-[#2F8D46] dark:text-[#22C55E] shrink-0" />
         <h3 className="text-sm font-semibold text-[#1F2937] dark:text-[#FFFFFF]">Recommended for you</h3>
@@ -46,4 +46,5 @@ export default function PersonalizedRecommendations() {
     </section>
   );
 }
+
 

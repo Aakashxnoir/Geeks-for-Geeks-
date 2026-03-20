@@ -10,8 +10,8 @@ interface PageLayoutProps {
 }
 
 /**
- * Layout wrapper for site pages: consistent container and header (title + subtitle).
- * Search and dark mode live in the navbar only; no duplicate toggle or search here.
+ * Layout wrapper for site pages: consistent container and header.
+ * Dense, premium layout with Liquid Glass styling.
  */
 export default function PageLayout({
   title,
@@ -25,19 +25,19 @@ export default function PageLayout({
   return (
     <div
       className={[
-        'gfg-page-module relative min-h-screen w-full',
+        'gfg-page-module relative min-h-screen w-full pt-4 pb-8',
         isDark ? 'dark' : '',
       ].join(' ')}
     >
-      <div className="gfg-shell space-y-4">
-        <header className="glass-card flex flex-col gap-3 p-6 !rounded-b-none border-b-0 shadow-none w-full">
-          <div className="min-w-0 w-full text-center md:text-left">
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold break-words tracking-tight text-[color:var(--gfg-text-primary)] dark:text-white">
+      <div className="gfg-shell space-y-4 px-3 sm:px-4 lg:px-6">
+        <header className="glass-panel py-5 px-5 sm:py-6 sm:px-6 w-full">
+          <div className="min-w-0 w-full max-w-3xl">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-[color:var(--gfg-text-primary)]">
               <span className="text-[color:var(--gfg-accent)]">{title?.split(' ')[0]}</span>{' '}
               {title?.split(' ').slice(1).join(' ')}
             </h1>
             {subtitle && (
-              <p className="text-sm sm:text-base text-[color:var(--gfg-text-secondary)] dark:text-white/80 mt-1 break-words leading-relaxed">
+              <p className="text-xs sm:text-sm text-[color:var(--gfg-text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
                 {subtitle}
               </p>
             )}
@@ -45,7 +45,9 @@ export default function PageLayout({
           {showAnalyticsStrip && analyticsStrip}
         </header>
 
-        {children}
+        <div>
+          {children}
+        </div>
       </div>
     </div>
   );
