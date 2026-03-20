@@ -91,7 +91,7 @@ const ClubInfo = () => {
   return (
     <PageLayout
       title="Club Information"
-      subtitle="GeeksforGeeks Campus Club at RIT — Learn. Build. Compete."
+      subtitle="Learn, build, and compete at RIT"
     >
       {/* About + Activities — Community-style card */}
       <section className="gfg-card" aria-labelledby="about-heading">

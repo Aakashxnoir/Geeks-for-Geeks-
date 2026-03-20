@@ -210,13 +210,10 @@ const TopBar = ({ darkMode, onToggleDarkMode }: TopBarProps) => {
               </button>
 
               {settingsOpen && (
-                <div className={`absolute right-0 mt-3 w-60 rounded-2xl overflow-hidden border z-50 gfg-modal-enter ${darkMode ? 'bg-[#0f172a]/80 border-[#22C55E]/25 backdrop-blur-xl' : 'bg-white/68 border-[#bbf7d0]/70 backdrop-blur-xl'}`}>
+                <div className={`absolute right-0 mt-3 w-60 rounded-2xl overflow-hidden border z-50 gfg-modal-enter ${darkMode ? 'bg-[#0f172a]/80 border-[#3f3f46]/65 backdrop-blur-xl' : 'bg-white/68 border-[#cbd5e1]/70 backdrop-blur-xl'}`}>
                   <div className="px-3 py-2.5 border-b border-[#cfe8da] dark:border-[#334155]">
                     <p className="text-3 font-bold text-[#0f172a] dark:text-white">{displayName}</p>
                     <p className="text-xs text-[#6B7280] dark:text-[#cbd5e1] mt-1">{displayEmail}</p>
-                    <div className="mt-2 inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-black tracking-wide bg-[#34d399]/20 text-[#059669]">
-                      OPS_MANAGER
-                    </div>
                   </div>
 
                   <button

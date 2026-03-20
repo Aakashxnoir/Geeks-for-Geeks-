@@ -29,15 +29,15 @@ export default function PageLayout({
         isDark ? 'dark' : '',
       ].join(' ')}
     >
-      <div className="gfg-shell space-y-3 px-3 sm:px-4 lg:px-6">
-        <header className="glass-panel py-4 px-4 sm:py-5 sm:px-5 w-full">
-          <div className="min-w-0 w-full max-w-3xl">
-            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-2xl font-bold tracking-tight text-[color:var(--gfg-text-primary)]">
+      <div className="gfg-shell space-y-4 px-3 sm:px-4 lg:px-6">
+        <header className="w-full border-b border-[#e2e8f0]/70 dark:border-[#3f3f46]/80 pb-3">
+          <div className="min-w-0 w-full max-w-2xl">
+            <h1 className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-[color:var(--gfg-text-primary)]">
               <span className="text-[color:var(--gfg-accent)]">{title?.split(' ')[0]}</span>{' '}
               {title?.split(' ').slice(1).join(' ')}
             </h1>
             {subtitle && (
-              <p className="text-[11px] sm:text-xs md:text-sm text-[color:var(--gfg-text-secondary)] mt-1 leading-relaxed max-w-2xl">
+              <p className="text-[11px] sm:text-xs text-[color:var(--gfg-text-secondary)] mt-1.5 leading-relaxed">
                 {subtitle}
               </p>
             )}

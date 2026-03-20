@@ -58,7 +58,7 @@ export default function ProfilePage() {
         >
           <ArrowLeft className="w-5 h-5" /> Back
         </button>
-        <h1 className="text-sm font-black uppercase tracking-widest text-gray-400">User Profile Node</h1>
+        <h1 className="text-sm font-black uppercase tracking-widest text-gray-400">Profile</h1>
         <div className="w-20" /> {/* Spacer */}
       </div>
 
@@ -169,6 +169,36 @@ export default function ProfilePage() {
                   <div className="text-left">
                     <p className="text-xs font-black uppercase text-gray-400">Activity Level</p>
                     <p className="text-sm font-bold text-gray-900 dark:text-white">Professional Rank</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#22C55E] transition-colors" />
+              </button>
+              <button
+                onClick={() => navigate('/settings/security')}
+                className="w-full group flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:border-[#22C55E] transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-[#22C55E]/10 text-[#22C55E]">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-black uppercase text-gray-400">Account Controls</p>
+                    <p className="text-sm font-bold text-gray-900 dark:text-white">Security</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#22C55E] transition-colors" />
+              </button>
+              <button
+                onClick={() => navigate('/settings/notifications')}
+                className="w-full group flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:border-[#22C55E] transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-[#22C55E]/10 text-[#22C55E]">
+                    <Users className="w-5 h-5" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-black uppercase text-gray-400">Alerts Control</p>
+                    <p className="text-sm font-bold text-gray-900 dark:text-white">Notifications</p>
                   </div>
                 </div>
                 <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#22C55E] transition-colors" />

@@ -62,7 +62,7 @@ const Events = () => {
   return (
     <PageLayout
       title="Events"
-      subtitle="Workshops, contests, and hackathons by GFG Campus Club at RIT"
+      subtitle="Workshops, contests, and hackathons at RIT"
     >
       <section className="col-span-12 glass-panel min-h-[280px] p-4 sm:p-6" aria-label="Event list">
         {/* ... existing search and tabs ... */}

@@ -9,7 +9,7 @@ export default function Join() {
   return (
     <PageLayout
       title="Join the Club"
-      subtitle="Become part of GeeksforGeeks Campus Club at RIT — workshops, contests, and a supportive tech community"
+      subtitle="Join the club in a few quick steps"
     >
       <section className="gfg-bento-grid" aria-labelledby="join-intro-heading">
         <div className="gfg-card gfg-bento-span-2">
@@ -17,7 +17,7 @@ export default function Join() {
           How to join
         </h2>
         <p className="text-sm text-[#4B5563] dark:text-white/90 mb-6">
-          We welcome all RIT students interested in coding, DSA, and tech. Choose one of the options below to get started. Our team will get in touch with event updates and community access.
+          Choose one option below to join. We will share updates and community access after you register.
         </p>
 
         <div className="space-y-4">
@@ -25,9 +25,9 @@ export default function Join() {
             href={JOIN_FORM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="glass-card-soft flex items-center gap-4 p-4 border border-white/10 hover:border-[color:var(--gfg-accent)] transition-all group"
+            className="glass-card-soft flex items-center gap-4 p-4 border border-[#cbd5e1]/50 dark:border-[#3f3f46] hover:border-[#94a3b8] transition-all group"
           >
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#2F8D46]/10 dark:bg-[#22C55E]/20 text-[#2F8D46] dark:text-[#22C55E]">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/60 dark:bg-[#18181b] text-[#2F8D46] dark:text-[#22C55E] border border-[#e2e8f0] dark:border-[#3f3f46]">
               <FileText className="w-6 h-6" aria-hidden />
             </span>
             <div className="min-w-0 flex-1">
@@ -45,9 +45,9 @@ export default function Join() {
             href={WHATSAPP_GROUP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="glass-card-soft flex items-center gap-4 p-4 border border-white/10 hover:border-[color:var(--gfg-accent)] transition-all group"
+            className="glass-card-soft flex items-center gap-4 p-4 border border-[#cbd5e1]/50 dark:border-[#3f3f46] hover:border-[#94a3b8] transition-all group"
           >
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#2F8D46]/10 dark:bg-[#22C55E]/20 text-[#2F8D46] dark:text-[#22C55E]">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/60 dark:bg-[#18181b] text-[#2F8D46] dark:text-[#22C55E] border border-[#e2e8f0] dark:border-[#3f3f46]">
               <MessageCircle className="w-6 h-6" aria-hidden />
             </span>
             <div className="min-w-0 flex-1">

@@ -71,7 +71,7 @@ const Resources = () => {
   return (
     <PageLayout
       title="Learning Resources"
-      subtitle="DSA, web dev, CP, and career materials curated for the club"
+      subtitle="Curated learning tracks for coding and careers"
     >
       <section className="col-span-12 glass-panel min-h-[280px] p-4 sm:p-6" aria-label="Filters and resources">
         {/* ... existing header and Category buttons ... */}

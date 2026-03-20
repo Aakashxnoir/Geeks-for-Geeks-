@@ -23,6 +23,8 @@ import Join from './pages/Join';
 import NotFound from './pages/NotFound';
 import BadgesPage from './pages/BadgesPage';
 import ProfilePage from './pages/Profile';
+import SecurityPage from './pages/Security';
+import NotificationsPage from './pages/Notifications';
 import { CardDetailModal } from './components/ui/CardDetailModal';
 import { CardDetailProvider } from './lib/context/CardDetailContext';
 import BottomNav from './components/layout/BottomNav';
@@ -167,6 +169,54 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
                 element={
                   <RequireAuth>
                     <ProfilePage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/settings/profile"
+                element={
+                  <RequireAuth>
+                    <ProfilePage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/settings/profile-details"
+                element={
+                  <RequireAuth>
+                    <Navigate to="/settings/profile" replace />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/security"
+                element={
+                  <RequireAuth>
+                    <SecurityPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/settings/security"
+                element={
+                  <RequireAuth>
+                    <SecurityPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/notifications"
+                element={
+                  <RequireAuth>
+                    <NotificationsPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/settings/notifications"
+                element={
+                  <RequireAuth>
+                    <NotificationsPage />
                   </RequireAuth>
                 }
               />

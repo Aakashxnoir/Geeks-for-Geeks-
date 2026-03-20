@@ -198,9 +198,9 @@ aside {
 
 /* Cards — Liquid Glass surfaces */
 .gfg-card, .glass-card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.72), rgba(240,253,244,0.55));
+  background: linear-gradient(135deg, rgba(255,255,255,0.82), rgba(241,245,249,0.64));
   border-radius: var(--gfg-radius-lg);
-  border: 1px solid rgba(134, 239, 172, 0.35);
+  border: 1px solid rgba(203, 213, 225, 0.5);
   box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(0,0,0,0.03);
   padding: var(--gfg-space-4);
   backdrop-filter: blur(16px) saturate(160%);
@@ -245,14 +245,14 @@ html.dark .gfg-card-soft {
 }
 
 .gfg-card:hover {
-  border-color: var(--gfg-accent);
+  border-color: rgba(148, 163, 184, 0.7);
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.4);
   transform: translateY(-2px);
 }
 
 .dark .gfg-card:hover {
-  box-shadow: 0 0 25px rgba(22, 163, 74, 0.15), 0 0 50px rgba(0, 0, 0, 0.6);
-  border-color: rgba(22, 163, 74, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  border-color: rgba(82, 82, 91, 0.7);
 }
 
 /* Micro-animations */
@@ -263,16 +263,15 @@ html.dark .gfg-card-soft {
   transform: scale(1.01);
 }
 
-/* Dark-context overrides: clear dark black glass */
+/* Dark-context overrides: keep neutral zinc glass */
 html.dark .gfg-card,
 html.dark .glass-card,
 .gfg-page-module.dark .gfg-card,
 .gfg-community-module.dark .gfg-card {
-  /* Keep the surface dark, but tint it with the brand green. */
-  background: linear-gradient(135deg, rgba(20, 83, 45, 0.55) 0%, rgba(5, 5, 5, 0.92) 100%) !important;
-  background-image: linear-gradient(135deg, rgba(20, 83, 45, 0.55) 0%, rgba(5, 5, 5, 0.92) 100%) !important;
-  border-color: rgba(34, 197, 94, 0.18) !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 28px rgba(34, 197, 94, 0.08);
+  background: linear-gradient(135deg, rgba(24,24,27,0.8) 0%, rgba(9,9,11,0.72) 100%) !important;
+  background-image: linear-gradient(135deg, rgba(24,24,27,0.8) 0%, rgba(9,9,11,0.72) 100%) !important;
+  border-color: rgba(63, 63, 70, 0.6) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   color: #FFFFFF;
@@ -1718,29 +1717,29 @@ html.dark .resources-card-link { color: #22C55E; }
 /* ========== LIQUID GLASS UTILITIES ========== */
 
 .glass-panel {
-  background: linear-gradient(135deg, rgba(255,255,255,0.70), rgba(240,253,244,0.50)) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,0.78), rgba(248,250,252,0.62)) !important;
   backdrop-filter: blur(20px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  border: 1px solid rgba(134, 239, 172, 0.30) !important;
+  border: 1px solid rgba(203, 213, 225, 0.5) !important;
   box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(0,0,0,0.03) !important;
   border-radius: var(--gfg-radius-lg) !important;
   transition: background 0.3s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .dark .glass-panel,
 html.dark .glass-panel {
-  background: linear-gradient(135deg, rgba(20,83,45,0.55), rgba(17,17,19,0.72)) !important;
-  border-color: rgba(34, 197, 94, 0.25) !important;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.15), 0 0 24px rgba(34,197,94,0.10) !important;
+  background: linear-gradient(135deg, rgba(24,24,27,0.82), rgba(9,9,11,0.72)) !important;
+  border-color: rgba(63, 63, 70, 0.6) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.2) !important;
   backdrop-filter: blur(20px) saturate(160%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
   color: var(--gfg-text-primary);
 }
 
 .glass-card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.75), rgba(240,253,244,0.55)) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,0.82), rgba(241,245,249,0.64)) !important;
   backdrop-filter: blur(16px) saturate(160%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
-  border: 1px solid rgba(134, 239, 172, 0.30) !important;
+  border: 1px solid rgba(203, 213, 225, 0.5) !important;
   box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(0,0,0,0.02) !important;
   border-radius: var(--gfg-radius-lg) !important;
   transition: all 200ms ease-out;
@@ -1748,9 +1747,9 @@ html.dark .glass-panel {
   overflow: hidden;
 }
 html.dark .glass-card {
-  background: linear-gradient(135deg, rgba(20,83,45,0.60), rgba(17,17,19,0.70)) !important;
-  border-color: rgba(34, 197, 94, 0.18) !important;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.12), 0 0 26px rgba(34,197,94,0.08) !important;
+  background: linear-gradient(135deg, rgba(24,24,27,0.8), rgba(9,9,11,0.72)) !important;
+  border-color: rgba(63, 63, 70, 0.6) !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.12) !important;
   color: var(--gfg-text-primary);
 }
 .glass-card:hover {
@@ -1758,7 +1757,7 @@ html.dark .glass-card {
 }
 html.dark .glass-card:hover {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
-  border-color: rgba(34, 197, 94, 0.3) !important;
+  border-color: rgba(82, 82, 91, 0.7) !important;
 }
 
 .glass-nav-pill {

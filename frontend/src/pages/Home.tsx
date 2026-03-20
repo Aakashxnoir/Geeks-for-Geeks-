@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSiteTheme } from '../lib/context/SiteThemeContext';
 import {
   Users,
@@ -42,6 +42,49 @@ const statIcons: Record<string, React.ElementType> = {
   contributors: Award,
 };
 
+const WHY_JOIN_STORAGE_KEY = 'gfg-why-join-completed';
+
+type JoinGuidance = {
+  reason: string;
+  steps: string[];
+  route: string;
+  cta: string;
+};
+
+function getJoinGuidance(title: string): JoinGuidance {
+  const key = title.toLowerCase();
+  if (key.includes('skill')) {
+    return {
+      reason: 'Build core coding skills with guided practice and structured sessions.',
+      steps: ['Start with the Learning Resources tracks.', 'Pick one roadmap and complete it weekly.', 'Apply it in upcoming club workshops.'],
+      route: '/resources',
+      cta: 'Go to Resources',
+    };
+  }
+  if (key.includes('network')) {
+    return {
+      reason: 'Meet active members, seniors, and mentors through the community.',
+      steps: ['Open Community and view active contributors.', 'Follow upcoming collaboration events.', 'Reach out through Contact when needed.'],
+      route: '/community',
+      cta: 'Go to Community',
+    };
+  }
+  if (key.includes('placement')) {
+    return {
+      reason: 'Prepare for placements with focused event sessions and regular practice.',
+      steps: ['Open Events and find prep sessions.', 'Register for the next placement-focused event.', 'Track your progress in Dashboard.'],
+      route: '/events',
+      cta: 'Go to Events',
+    };
+  }
+  return {
+    reason: 'Gain practical exposure through hackathons, contests, and project work.',
+    steps: ['Join a current event or challenge.', 'Complete one resource track to support your project.', 'Showcase your activity in Community.'],
+    route: '/events',
+    cta: 'Go to Events',
+  };
+}
+
 function getResourcePreviewIcon(category: string, type: string) {
   if (type === 'Course') return BookOpen;
 
@@ -67,9 +110,20 @@ function getResourcePreviewIcon(category: string, type: string) {
 
 function HomeInner() {
   const { isDark } = useSiteTheme();
+  const navigate = useNavigate();
   const { showDetails } = useCardDetail();
   const [upcomingPreview, setUpcomingPreview] = useState<Array<any>>([]);
   const [resourcesPreview, setResourcesPreview] = useState<Array<any>>([]);
+  const [completedWhyJoin, setCompletedWhyJoin] = useState<string[]>(() => {
+    try {
+      const raw = localStorage.getItem(WHY_JOIN_STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  });
+  const [activeWhyJoinTitle, setActiveWhyJoinTitle] = useState<string | null>(null);
 
   const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:4000';
 
@@ -100,12 +154,38 @@ function HomeInner() {
     };
   }, [API_BASE_URL]);
 
-  const handleFeatureClick = (_card: typeof HERO_FEATURE_CARDS[0]) => {
-    // Info integrated directly into cards — no popup
+  useEffect(() => {
+    try {
+      localStorage.setItem(WHY_JOIN_STORAGE_KEY, JSON.stringify(completedWhyJoin));
+    } catch {}
+  }, [completedWhyJoin]);
+
+  const handleFeatureClick = (card: typeof HERO_FEATURE_CARDS[0]) => {
+    const title = card.title.toLowerCase();
+    if (title.includes('event')) return navigate('/events');
+    if (title.includes('resource') || title.includes('learn')) return navigate('/resources');
+    if (title.includes('community')) return navigate('/community');
+    if (title.includes('join')) return navigate('/join');
+    return navigate('/community');
   };
 
-  const handleStatClick = (_stat: typeof STATS[0]) => {
-    // Info displayed directly in stat card — no popup
+  const handleStatClick = (stat: typeof STATS[0]) => {
+    const label = stat.label.toLowerCase();
+    if (label.includes('event') || label.includes('workshop')) return navigate('/events');
+    if (label.includes('problem')) return navigate('/resources');
+    if (label.includes('member') || label.includes('contributor')) return navigate('/community');
+    return navigate('/community');
+  };
+
+  const availableWhyJoin = WHY_JOIN.filter((item) => !completedWhyJoin.includes(item.title));
+  const activeWhyJoinItem = availableWhyJoin.find((item) => item.title === activeWhyJoinTitle) || null;
+  const activeGuidance = activeWhyJoinItem ? getJoinGuidance(activeWhyJoinItem.title) : null;
+
+  const handleWhyJoinComplete = () => {
+    if (!activeWhyJoinItem || !activeGuidance) return;
+    setCompletedWhyJoin((prev) => (prev.includes(activeWhyJoinItem.title) ? prev : [...prev, activeWhyJoinItem.title]));
+    setActiveWhyJoinTitle(null);
+    navigate(activeGuidance.route);
   };
 
   return (
@@ -227,7 +307,12 @@ function HomeInner() {
             </div>
             <div className="gfg-grid">
               {upcomingPreview.map((ev) => (
-                <div key={ev.id} className="col-span-12 sm:col-span-6 lg:col-span-4 glass-card p-5 group">
+                <Link
+                  key={ev.id}
+                  to={`/events/${ev.id}`}
+                  className="col-span-12 sm:col-span-6 lg:col-span-4 glass-card p-5 group block cursor-pointer hover:ring-2 hover:ring-[color:var(--gfg-accent)] active:scale-[0.98] transition-all"
+                  aria-label={`Open event ${ev.title}`}
+                >
                   <span className="inline-block text-xs font-semibold text-[#2F8D46] dark:text-[#22C55E] bg-[#f0fdf4] dark:bg-[rgba(34,197,94,0.12)] px-2.5 py-1 rounded-full mb-3">
                     {ev.type}
                   </span>
@@ -235,7 +320,7 @@ function HomeInner() {
                     {ev.title}
                   </h3>
                   <p className="text-xs text-[#4B5563] dark:text-white/70 mt-1">{ev.date} · {ev.venue}</p>
-                </div>
+                </Link>
               ))}
             </div>
           </section>
@@ -256,8 +341,16 @@ function HomeInner() {
             <div className="gfg-grid">
               {resourcesPreview.map((res) => {
                 const Icon = getResourcePreviewIcon(res.category, res.type);
+                const target = res.link || '/resources';
                 return (
-                  <div key={res.title} className="col-span-12 sm:col-span-6 lg:col-span-3 glass-card p-5 group">
+                  <a
+                    key={res.id || res.title}
+                    href={target}
+                    target={target.startsWith('http') ? '_blank' : undefined}
+                    rel={target.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    className="col-span-12 sm:col-span-6 lg:col-span-3 glass-card p-5 group block cursor-pointer hover:ring-2 hover:ring-[color:var(--gfg-accent)] active:scale-[0.98] transition-all"
+                    aria-label={`Open resource ${res.title}`}
+                  >
                     <div className="flex items-center gap-2 mb-2 pointer-events-none">
                       <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[color:var(--gfg-accent)]/10 border border-[color:var(--gfg-accent)]/20">
                         <Icon className="w-4 h-4 text-[#2F8D46] dark:text-[#22C55E]" aria-hidden />
@@ -270,7 +363,7 @@ function HomeInner() {
                       {res.title}
                     </h3>
                     <p className="text-xs text-[#4B5563] dark:text-white/70 mt-1 line-clamp-2">{res.description}</p>
-                  </div>
+                  </a>
                 );
               })}
             </div>
@@ -278,23 +371,59 @@ function HomeInner() {
         )}
 
         {/* ─── 6. WHY JOIN ──────────────────────────── */}
-        {WHY_JOIN && WHY_JOIN.length > 0 && (
+        {availableWhyJoin.length > 0 && (
           <section className="col-span-12 glass-panel p-5 sm:p-6" aria-labelledby="why-join-heading">
             <h2 id="why-join-heading" className="text-base sm:text-lg md:text-xl font-bold text-[#111827] dark:text-white mb-4">
               Why join GFG @ RIT?
             </h2>
             <div className="gfg-grid">
-              {WHY_JOIN.map((item) => (
-                <div key={item.title} className="col-span-12 sm:col-span-6 lg:col-span-4 glass-card p-5 group">
+              {availableWhyJoin.map((item) => (
+                <button
+                  key={item.title}
+                  type="button"
+                  onClick={() => setActiveWhyJoinTitle(item.title)}
+                  className="col-span-12 sm:col-span-6 lg:col-span-4 glass-card p-5 group text-left cursor-pointer hover:ring-2 hover:ring-[color:var(--gfg-accent)] active:scale-[0.98] transition-all"
+                >
                   <h3 className="font-bold text-[#020617] dark:text-white text-xs sm:text-sm md:text-base group-hover:text-[#22C55E] transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-xs sm:text-sm md:text-base text-[#4B5563] dark:text-white/80 mt-2 leading-relaxed">
-                    {item.body}
+                  <p className="text-xs sm:text-sm text-[#4B5563] dark:text-white/80 mt-1.5 leading-relaxed">
+                    {item.description}
                   </p>
-                </div>
+                </button>
               ))}
             </div>
+            {activeGuidance && activeWhyJoinItem && (
+              <div className="glass-card mt-4 p-4 sm:p-5">
+                <h3 className="text-sm sm:text-base font-bold text-[#111827] dark:text-white">
+                  {activeWhyJoinItem.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-[#4B5563] dark:text-white/80 mt-1.5">
+                  {activeGuidance.reason}
+                </p>
+                <div className="mt-3 space-y-1.5 text-xs sm:text-sm text-[#4B5563] dark:text-white/80">
+                  {activeGuidance.steps.map((step) => (
+                    <p key={step}>- {step}</p>
+                  ))}
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={handleWhyJoinComplete}
+                    className="px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-[#2F8D46] dark:bg-[#22C55E] text-white dark:text-[#052E16] hover:opacity-90 transition-opacity"
+                  >
+                    {activeGuidance.cta}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveWhyJoinTitle(null)}
+                    className="px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-[#E5E7EB] dark:border-[#3d4a5c] text-[#111827] dark:text-white hover:border-[#2F8D46] dark:hover:border-[#22C55E] transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
           </section>
         )}
 

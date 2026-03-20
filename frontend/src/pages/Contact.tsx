@@ -177,7 +177,7 @@ const Contact = () => {
   return (
     <PageLayout
       title="Contact"
-      subtitle="Get in touch with GFG Campus Club at RIT — queries, collaborations, join the community"
+      subtitle="Questions, collaborations, and support"
     >
       {/* 0. Contact details — high contrast in light and dark mode */}
       <section
@@ -189,7 +189,7 @@ const Contact = () => {
           Contact details
         </h2>
         <p className="text-sm text-[#047857] dark:!text-[#FFFFFF] mb-3">
-          Reach us for queries, collaborations, and to join the club. We respond to email and WhatsApp.
+          Reach us by email or WhatsApp for quick support.
         </p>
         <div className="flex flex-wrap items-center gap-4 sm:gap-6">
           <a
