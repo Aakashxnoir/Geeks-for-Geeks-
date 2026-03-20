@@ -96,7 +96,7 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-40 h-14 sm:h-16 flex items-center ${darkMode ? 'bg-[#111113]/85 border-b border-[#3f3f46]/50' : 'bg-white/70 border-b border-[#e2e8f0]/50'} w-full backdrop-blur-xl backdrop-saturate-150 transition-colors duration-200`}>
+    <nav className={`fixed top-0 left-0 right-0 z-40 h-16 sm:h-[4.5rem] flex items-center ${darkMode ? 'bg-[#111113]/80 border-b border-[#22C55E]/20 shadow-[0_8px_30px_rgba(0,0,0,0.45)]' : 'bg-white/65 border-b border-[#bbf7d0]/60 shadow-[0_8px_24px_rgba(15,23,42,0.08)]'} w-full backdrop-blur-2xl backdrop-saturate-150 transition-colors duration-200`}>
       <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 w-full max-w-[1440px] mx-auto">
         
         <div className="flex items-center gap-2 sm:gap-4 flex-1">
@@ -168,14 +168,14 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
 
             <button
               onClick={onToggleDarkMode}
-              className="p-2 rounded-xl text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-all"
+              className="p-2 rounded-xl border border-transparent dark:border-white/10 text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/70 dark:hover:bg-white/8 transition-all"
             >
                 {darkMode ? <Sun className="w-4 h-4 sm:w-5 sm:h-5" /> : <Moon className="w-4 h-4 sm:w-5 sm:h-5" />}
             </button>
 
             <div className="relative" ref={notificationsRef}>
               <button
-                className="p-2 rounded-xl text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-all relative"
+                className="p-2 rounded-xl border border-transparent dark:border-white/10 text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/70 dark:hover:bg-white/8 transition-all relative"
                 onClick={() => setNotificationsOpen(!notificationsOpen)}
               >
                 <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -211,7 +211,7 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
               <button
                 type="button"
                 onClick={() => setSettingsOpen((prev) => !prev)}
-                className="p-2 rounded-xl text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-all"
+                className="p-2 rounded-xl border border-transparent dark:border-white/10 text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100/70 dark:hover:bg-white/8 transition-all"
                 aria-expanded={settingsOpen}
                 aria-haspopup="menu"
                 aria-label="Open account menu"
@@ -220,8 +220,8 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
               </button>
 
               {settingsOpen && (
-                <div className={`absolute right-0 mt-3 w-64 rounded-2xl overflow-hidden border z-50 gfg-modal-enter ${darkMode ? 'bg-[#0f172a]/80 border-[#3d4a5c] backdrop-blur-xl' : 'bg-white/70 border-[#d9efe2] backdrop-blur-xl'}`}>
-                  <div className="p-3 border-b border-[#cfe8da] dark:border-[#334155]">
+                <div className={`absolute right-0 mt-3 w-60 rounded-2xl overflow-hidden border z-50 gfg-modal-enter ${darkMode ? 'bg-[#0f172a]/80 border-[#22C55E]/25 backdrop-blur-xl' : 'bg-white/68 border-[#bbf7d0]/70 backdrop-blur-xl'}`}>
+                  <div className="px-3 py-2.5 border-b border-[#cfe8da] dark:border-[#334155]">
                     <p className="text-3 font-bold text-[#0f172a] dark:text-white">{displayName}</p>
                     <p className="text-xs text-[#6B7280] dark:text-[#cbd5e1] mt-1">{displayEmail}</p>
                     <div className="mt-2 inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-black tracking-wide bg-[#34d399]/20 text-[#059669]">
@@ -232,7 +232,7 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
                   <button
                     type="button"
                     onClick={handleOpenSettings}
-                    className="w-full px-4 py-3 flex items-center gap-3 text-left text-[#374151] dark:text-[#cbd5e1] hover:bg-[#f3f4f6]/80 dark:hover:bg-white/5 transition-colors"
+                    className="w-full px-3 py-2.5 flex items-center gap-2.5 text-left text-[#374151] dark:text-[#cbd5e1] hover:bg-[#f3f4f6]/80 dark:hover:bg-white/5 transition-colors"
                   >
                     <Settings className="w-4 h-4" />
                     <span className="font-semibold">Settings</span>
@@ -240,7 +240,7 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
                   <button
                     type="button"
                     onClick={handleProfileClick}
-                    className="w-full px-4 py-3 flex items-center gap-3 text-left text-[#374151] dark:text-[#cbd5e1] hover:bg-[#f3f4f6]/80 dark:hover:bg-white/5 transition-colors"
+                    className="w-full px-3 py-2.5 flex items-center gap-2.5 text-left text-[#374151] dark:text-[#cbd5e1] hover:bg-[#f3f4f6]/80 dark:hover:bg-white/5 transition-colors"
                   >
                     <User className="w-4 h-4" />
                     <span className="font-semibold">Profile</span>
@@ -248,7 +248,7 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
                   <button
                     type="button"
                     onClick={handleSignOut}
-                    className="w-full px-4 py-3 flex items-center gap-3 text-left text-red-500 hover:bg-red-50/80 dark:hover:bg-red-500/10 transition-colors"
+                    className="w-full px-3 py-2.5 flex items-center gap-2.5 text-left text-red-500 hover:bg-red-50/80 dark:hover:bg-red-500/10 transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
                     <span className="font-semibold">Sign out</span>
