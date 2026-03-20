@@ -1,17 +1,48 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
-import { UPCOMING_EVENTS, PAST_EVENTS, EVENT_TABS, EVENT_TYPE_FILTERS, getEventPosterUrl } from '../utils/data/eventsData';
-import { useCardDetail } from '../lib/context/CardDetailContext';
-
-const upcomingList = Array.isArray(UPCOMING_EVENTS) ? UPCOMING_EVENTS : [];
-const pastList = Array.isArray(PAST_EVENTS) ? PAST_EVENTS : [];
+import { EVENT_TABS, EVENT_TYPE_FILTERS, getEventPosterUrl } from '../utils/data/eventsData';
 
 const Events = () => {
-  const { showDetails } = useCardDetail();
   const [activeTab, setActiveTab] = useState('upcoming');
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState('All');
+  const [upcomingList, setUpcomingList] = useState<Array<any>>([]);
+  const [pastList, setPastList] = useState<Array<any>>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:4000';
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      setIsLoading(true);
+      try {
+        const [upcomingRes, pastRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/api/events/upcoming`),
+          fetch(`${API_BASE_URL}/api/events/past`),
+        ]);
+
+        const upcomingData = await upcomingRes.json();
+        const pastData = await pastRes.json();
+
+        if (cancelled) return;
+        setUpcomingList(Array.isArray(upcomingData?.events) ? upcomingData.events : []);
+        setPastList(Array.isArray(pastData?.events) ? pastData.events : []);
+      } catch {
+        if (cancelled) return;
+        setUpcomingList([]);
+        setPastList([]);
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [API_BASE_URL]);
 
   const list = activeTab === 'upcoming' ? upcomingList : pastList;
   const q = searchQuery.trim().toLowerCase();
@@ -28,8 +59,8 @@ const Events = () => {
       ? bySearch
       : bySearch.filter((e) => e.type && e.type.toLowerCase() === typeFilter.toLowerCase());
 
-  const handleEventClick = (e: React.MouseEvent, event: typeof UPCOMING_EVENTS[0]) => {
-     // Navigate directly to event detail page — no popup overlay
+  const handleEventClick = (_e: React.MouseEvent, _event: any) => {
+    // Navigate directly to event detail page — no popup overlay
   };
 
   return (
@@ -39,7 +70,10 @@ const Events = () => {
     >
       <section className="col-span-12 glass-panel min-h-[280px] p-4 sm:p-6" aria-label="Event list">
         {/* ... existing search and tabs ... */}
-        <div className="gfg-grid">
+        {isLoading ? (
+          <p className="text-sm text-[#4B5563] dark:!text-[#FFFFFF] py-8 text-center">Loading events...</p>
+        ) : (
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filtered.length > 0 ? (
             filtered.map((event) => {
               const poster = getEventPosterUrl(event);
@@ -48,7 +82,7 @@ const Events = () => {
                   key={event.id}
                   to={`/events/${event.id}`}
                   onClick={(e) => handleEventClick(e, event)}
-                  className="col-span-12 sm:col-span-6 lg:col-span-4 glass-card overflow-hidden block hover:no-underline p-4 cursor-pointer hover:ring-2 hover:ring-[color:var(--gfg-accent)] active:scale-[0.98] transition-all"
+                  className="glass-card overflow-hidden block hover:no-underline p-4 cursor-pointer hover:ring-2 hover:ring-[color:var(--gfg-accent)] active:scale-[0.98] transition-all"
                   aria-label={`View details for ${event.title}`}
                 >
                   {poster ? (
@@ -78,11 +112,12 @@ const Events = () => {
               );
             })
           ) : (
-            <p className="col-span-full text-sm text-[#4B5563] dark:!text-[#FFFFFF] py-6 text-center">
+            <p className="text-sm text-[#4B5563] dark:!text-[#FFFFFF] py-6 text-center col-span-2 lg:col-span-3">
               No events match your search or filter.
             </p>
           )}
         </div>
+        )}
       </section>
     </PageLayout>
   );

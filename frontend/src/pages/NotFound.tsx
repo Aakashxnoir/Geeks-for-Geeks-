@@ -18,7 +18,7 @@ export default function NotFound() {
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <Link
-            to="/"
+            to="/app"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium bg-[#2F8D46] dark:bg-[#22C55E] text-white hover:opacity-90 transition-opacity"
           >
             <Home className="w-4 h-4" aria-hidden />

@@ -25,7 +25,7 @@ const navigationGroups = [
   {
     title: 'OVERVIEW',
     items: [
-      { to: '/', label: 'Home', icon: Home },
+      { to: '/app', label: 'Home', icon: Home },
     ]
   },
   {
@@ -94,7 +94,7 @@ export default function Sidebar({
         <div className="flex flex-col h-full relative overflow-hidden">
           {/* Header - CIVIQ Branding Style */}
           <div className="p-6 flex items-center justify-between border-b border-gray-100 dark:border-white/5 relative z-10">
-            <Link to="/" className="flex items-center gap-3" onClick={handleLinkClick}>
+            <Link to="/app" className="flex items-center gap-3" onClick={handleLinkClick}>
               <div className="p-1.5 rounded-xl bg-[color:var(--gfg-accent)] shadow-lg shadow-[color:var(--gfg-accent)]/20">
                 <img src="/logo.png" alt="GFG" className="w-7 h-7 brightness-0 invert" />
               </div>

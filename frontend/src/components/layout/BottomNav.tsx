@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Home, Users, Calendar, BookOpen, UserPlus } from 'lucide-react';
 
 const bottomNavItems = [
-  { to: '/', label: 'Home', icon: Home },
+  { to: '/app', label: 'Home', icon: Home },
   { to: '/community', label: 'Nodes', icon: Users },
   { to: '/events', label: 'Events', icon: Calendar },
   { to: '/resources', label: 'Vault', icon: BookOpen },

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Sparkles, Code2 } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff, Moon, Sparkles, Sun } from 'lucide-react';
 import { useAuth } from '../lib/context/AuthContext';
 import { motion } from 'motion/react';
+import { useSiteTheme } from '../lib/context/SiteThemeContext';
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,18 +11,25 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { signup } = useAuth();
+  const { isDark, toggleTheme } = useSiteTheme();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
 
-    // Simulate network delay for premium feel
-    setTimeout(() => {
-      login();
-      navigate('/', { replace: true });
-    }, 600);
+    try {
+      await signup({ name, email, password });
+      navigate('/app', { replace: true });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Signup failed.';
+      setError(msg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -33,9 +41,11 @@ export default function SignUp() {
         
         <div className="relative z-10">
           <Link to="/" className="inline-flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <div className="w-10 h-10 rounded-xl bg-white shadow-lg flex items-center justify-center">
-              <Code2 className="w-6 h-6 text-[#16a34a]" />
-            </div>
+            <img
+              src="/logo.png"
+              alt="GFG X RIT"
+              className="w-10 h-10 rounded-xl bg-white shadow-lg p-2 object-contain"
+            />
             <span className="text-xl font-bold tracking-tight">GeeksforGeeks RIT</span>
           </Link>
         </div>
@@ -73,28 +83,39 @@ export default function SignUp() {
 
       {/* Right panel: Authentication Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative overflow-y-auto">
-        <div className="absolute top-6 right-6 lg:top-10 lg:right-10 hidden sm:block">
-          <p className="text-sm font-medium text-[#71717a] dark:text-[#a1a1aa]">
-            Already have an account?{' '}
-            <Link to="/signin" className="text-[#16a34a] hover:text-[#15803d] dark:hover:text-[#22c55e] transition-colors font-semibold">
-              Sign in
-            </Link>
-          </p>
-        </div>
-
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4 }}
-          className="w-full max-w-[400px] my-auto"
+        <Link
+          to="/"
+          className="absolute top-6 left-6 lg:top-10 lg:left-10 inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/60 dark:bg-white/5 border border-[#bbf7d0] dark:border-[#14532d] text-[#0f2d1a] dark:text-white text-[11px] font-extrabold uppercase tracking-widest hover:opacity-90 transition-colors"
+          aria-label="Back to home"
         >
+          <ArrowLeft className="w-4 h-4" />
+          Back to home
+        </Link>
+
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="absolute top-6 right-6 lg:top-10 lg:right-10 p-2 rounded-xl bg-white/60 dark:bg-white/5 border border-[#bbf7d0] dark:border-[#14532d] hover:opacity-90 transition-colors"
+          aria-label="Toggle theme"
+        >
+          {isDark ? <Sun className="w-4 h-4 text-[#fde68a]" /> : <Moon className="w-4 h-4 text-[#15803d]" />}
+        </button>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="w-full max-w-[400px] my-auto"
+          >
           {/* Mobile Logo */}
-          <div className="lg:hidden mb-10 flex items-center gap-3">
-             <div className="w-10 h-10 rounded-xl bg-[#16a34a] shadow-lg flex items-center justify-center">
-              <Code2 className="w-6 h-6 text-white" />
-            </div>
+          <Link to="/" className="lg:hidden mb-10 flex items-center gap-3">
+            <img
+              src="/logo.png"
+              alt="GFG X RIT"
+              className="w-10 h-10 rounded-xl bg-[#16a34a] shadow-lg p-1 object-contain"
+            />
             <span className="text-xl font-bold tracking-tight text-[#09090b] dark:text-white">GFG RIT</span>
-          </div>
+          </Link>
 
           <div className="mb-8">
             <h2 className="text-2xl sm:text-3xl font-bold text-[#09090b] dark:text-white tracking-tight">
@@ -104,6 +125,12 @@ export default function SignUp() {
               Enter your details below to set up your profile.
             </p>
           </div>
+
+          {error && (
+            <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 text-sm font-medium rounded-xl p-3 mb-4">
+              {error}
+            </div>
+          )}
 
           <form className="space-y-4" noValidate onSubmit={handleSubmit}>
             <div className="space-y-1.5">
@@ -176,13 +203,18 @@ export default function SignUp() {
             <p className="text-xs text-center text-[#71717a] dark:text-[#a1a1aa] mt-4 max-w-xs mx-auto">
               By clicking continue, you agree to our Terms of Service and Privacy Policy.
             </p>
-            
-            <p className="lg:hidden text-center text-sm font-medium text-[#71717a] dark:text-[#a1a1aa] mt-8">
-              Already have an account?{' '}
-              <Link to="/signin" className="text-[#16a34a] hover:text-[#15803d] dark:hover:text-[#22c55e] transition-colors font-semibold">
-                Sign in
-              </Link>
-            </p>
+
+            <div className="pt-6 mt-2 border-t border-[#e4e4e7] dark:border-[#27272a]">
+              <p className="text-center text-sm font-medium text-[#71717a] dark:text-[#a1a1aa]">
+                Already have an account?{' '}
+                <Link
+                  to="/signin"
+                  className="text-[#16a34a] hover:text-[#15803d] dark:hover:text-[#22c55e] transition-colors font-semibold"
+                >
+                  Sign in
+                </Link>
+              </p>
+            </div>
           </form>
         </motion.div>
       </div>

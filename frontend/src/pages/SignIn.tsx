@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Sparkles, Code2 } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff, Moon, Sparkles, Sun } from 'lucide-react';
 import { useAuth } from '../lib/context/AuthContext';
 import { motion } from 'motion/react';
+import { useSiteTheme } from '../lib/context/SiteThemeContext';
 
 const DEMO_EMAIL = 'demo@gfg-rit.in';
 const DEMO_PASSWORD = 'Gfg@1234';
@@ -15,21 +16,22 @@ export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { isDark, toggleTheme } = useSiteTheme();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
-    setTimeout(() => {
-      if (email.trim() === DEMO_EMAIL && password === DEMO_PASSWORD) {
-        login();
-        navigate('/', { replace: true });
-      } else {
-        setError('Invalid credentials. Use the demo account to log in.');
-        setIsLoading(false);
-      }
-    }, 600);
+    try {
+      await login(email.trim(), password);
+      navigate('/app', { replace: true });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Invalid credentials.';
+      setError(msg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDemoFill = () => {
@@ -46,9 +48,11 @@ export default function SignIn() {
         
         <div className="relative z-10">
           <Link to="/" className="inline-flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <div className="w-10 h-10 rounded-xl bg-white shadow-lg flex items-center justify-center">
-              <Code2 className="w-6 h-6 text-[#16a34a]" />
-            </div>
+            <img
+              src="/logo.png"
+              alt="GFG X RIT"
+              className="w-10 h-10 rounded-xl bg-white shadow-lg p-2 object-contain"
+            />
             <span className="text-xl font-bold tracking-tight">GeeksforGeeks RIT</span>
           </Link>
         </div>
@@ -88,29 +92,40 @@ export default function SignIn() {
       </div>
 
       {/* Right panel: Authentication Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative">
-        <div className="absolute top-6 right-6 lg:top-10 lg:right-10 hidden sm:block">
-          <p className="text-sm font-medium text-[#71717a] dark:text-[#a1a1aa]">
-            Don't have an account?{' '}
-            <Link to="/signup" className="text-[#16a34a] hover:text-[#15803d] dark:hover:text-[#22c55e] transition-colors font-semibold">
-              Sign up
-            </Link>
-          </p>
-        </div>
-
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4 }}
-          className="w-full max-w-[400px]"
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative">
+        <Link
+          to="/"
+          className="absolute top-6 left-6 lg:top-10 lg:left-10 inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/60 dark:bg-white/5 border border-[#bbf7d0] dark:border-[#14532d] text-[#0f2d1a] dark:text-white text-[11px] font-extrabold uppercase tracking-widest hover:opacity-90 transition-colors"
+          aria-label="Back to home"
         >
+          <ArrowLeft className="w-4 h-4" />
+          Back to home
+        </Link>
+
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="absolute top-6 right-6 lg:top-10 lg:right-10 p-2 rounded-xl bg-white/60 dark:bg-white/5 border border-[#bbf7d0] dark:border-[#14532d] hover:opacity-90 transition-colors"
+          aria-label="Toggle theme"
+        >
+          {isDark ? <Sun className="w-4 h-4 text-[#fde68a]" /> : <Moon className="w-4 h-4 text-[#15803d]" />}
+        </button>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="w-full max-w-[400px]"
+          >
           {/* Mobile Logo */}
-          <div className="lg:hidden mb-10 flex items-center gap-3">
-             <div className="w-10 h-10 rounded-xl bg-[#16a34a] shadow-lg flex items-center justify-center">
-              <Code2 className="w-6 h-6 text-white" />
-            </div>
+          <Link to="/" className="lg:hidden mb-10 flex items-center gap-3">
+            <img
+              src="/logo.png"
+              alt="GFG X RIT"
+              className="w-10 h-10 rounded-xl bg-[#16a34a] shadow-lg p-1 object-contain"
+            />
             <span className="text-xl font-bold tracking-tight text-[#09090b] dark:text-white">GFG RIT</span>
-          </div>
+          </Link>
 
           <div className="mb-8">
             <h2 className="text-2xl sm:text-3xl font-bold text-[#09090b] dark:text-white tracking-tight">
@@ -199,13 +214,18 @@ export default function SignIn() {
                 Use Demo Credentials
               </button>
             </div>
-            
-            <p className="lg:hidden text-center text-sm font-medium text-[#71717a] dark:text-[#a1a1aa] mt-8">
-              Don't have an account?{' '}
-              <Link to="/signup" className="text-[#16a34a] hover:text-[#15803d] dark:hover:text-[#22c55e] transition-colors font-semibold">
-                Sign up
-              </Link>
-            </p>
+
+            <div className="pt-6 mt-4 border-t border-[#e4e4e7] dark:border-[#27272a]">
+              <p className="text-center text-sm font-medium text-[#71717a] dark:text-[#a1a1aa]">
+                New user?{' '}
+                <Link
+                  to="/signup"
+                  className="text-[#16a34a] hover:text-[#15803d] dark:hover:text-[#22c55e] transition-colors font-semibold"
+                >
+                  Create account
+                </Link>
+              </p>
+            </div>
           </form>
         </motion.div>
       </div>

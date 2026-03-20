@@ -129,12 +129,12 @@ html.dark, html.dark body, html.dark #root {
   max-width: var(--gfg-max-width);
   margin-left: auto;
   margin-right: auto;
-  padding: var(--gfg-space-3);
+  padding: var(--gfg-space-2);
 }
 
 @media (min-width: 640px) {
   .gfg-shell {
-    padding: var(--gfg-space-4) var(--gfg-space-3);
+    padding: var(--gfg-space-3) var(--gfg-space-2);
   }
 }
 
@@ -254,10 +254,11 @@ html.dark .gfg-card,
 html.dark .glass-card,
 .gfg-page-module.dark .gfg-card,
 .gfg-community-module.dark .gfg-card {
-  background: linear-gradient(135deg, rgba(15, 15, 15, 0.8) 0%, rgba(5, 5, 5, 0.9) 100%); /* Pure dark gradient */
-  background-image: linear-gradient(135deg, rgba(15, 15, 15, 0.8) 0%, rgba(5, 5, 5, 0.9) 100%) !important;
-  border-color: rgba(255, 255, 255, 0.08); /* faint white border */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  /* Keep the surface dark, but tint it with the brand green. */
+  background: linear-gradient(135deg, rgba(20, 83, 45, 0.55) 0%, rgba(5, 5, 5, 0.92) 100%) !important;
+  background-image: linear-gradient(135deg, rgba(20, 83, 45, 0.55) 0%, rgba(5, 5, 5, 0.92) 100%) !important;
+  border-color: rgba(34, 197, 94, 0.18) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 28px rgba(34, 197, 94, 0.08);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   color: #FFFFFF;
@@ -1689,9 +1690,9 @@ html.dark .resources-card-link { color: #22C55E; }
 }
 .dark .glass-panel,
 html.dark .glass-panel {
-  background: linear-gradient(135deg, rgba(24,24,27,0.72), rgba(17,17,19,0.60)) !important;
-  border-color: rgba(63, 63, 70, 0.5) !important;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.15) !important;
+  background: linear-gradient(135deg, rgba(20,83,45,0.55), rgba(17,17,19,0.72)) !important;
+  border-color: rgba(34, 197, 94, 0.25) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.15), 0 0 24px rgba(34,197,94,0.10) !important;
   backdrop-filter: blur(20px) saturate(160%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
   color: var(--gfg-text-primary);
@@ -1709,9 +1710,9 @@ html.dark .glass-panel {
   overflow: hidden;
 }
 html.dark .glass-card {
-  background: linear-gradient(135deg, rgba(24,24,27,0.78), rgba(17,17,19,0.65)) !important;
-  border-color: rgba(63, 63, 70, 0.6) !important;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.12) !important;
+  background: linear-gradient(135deg, rgba(20,83,45,0.60), rgba(17,17,19,0.70)) !important;
+  border-color: rgba(34, 197, 94, 0.18) !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.12), 0 0 26px rgba(34,197,94,0.08) !important;
   color: var(--gfg-text-primary);
 }
 .glass-card:hover {

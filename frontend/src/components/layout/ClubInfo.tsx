@@ -6,30 +6,61 @@ import TeamCard from '../TeamCard';
 import { CLUB_TEAM, CLUB_OBJECTIVES, CLUB_STATS, CLUB_ACTIVITIES } from '../../utils/data/clubInfoData';
 
 const ClubInfo = () => {
+  const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:4000';
+  const [team, setTeam] = useState(CLUB_TEAM);
+  const [objectives, setObjectives] = useState(CLUB_OBJECTIVES);
+  const [stats, setStats] = useState(CLUB_STATS);
+  const [activities, setActivities] = useState(CLUB_ACTIVITIES);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [statValues, setStatValues] = useState(CLUB_STATS.map(() => 0));
   const [statsVisible, setStatsVisible] = useState(false);
   const statsRef = useRef(null);
 
   const q = searchQuery.trim().toLowerCase();
-  const filteredTeam = useMemo(() => {
-    if (!q) return CLUB_TEAM;
-    return CLUB_TEAM.filter(
+  // Filtered views are derived from backend-loaded state (team/objectives/stats).
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/club-info`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (cancelled) return;
+        if (Array.isArray(data?.team)) setTeam(data.team);
+        if (Array.isArray(data?.objectives)) setObjectives(data.objectives);
+        if (Array.isArray(data?.stats)) setStats(data.stats);
+        if (Array.isArray(data?.activities)) setActivities(data.activities);
+        // Reset animated values when content changes.
+        if (Array.isArray(data?.stats)) setStatValues(data.stats.map(() => 0));
+      } catch {
+        // Keep mock data.
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [API_BASE_URL]);
+
+  const effectiveFilteredTeam = useMemo(() => {
+    if (!q) return team;
+    return team.filter(
       (m) =>
         m.name.toLowerCase().includes(q) ||
         m.role.toLowerCase().includes(q) ||
         m.deptYear.toLowerCase().includes(q) ||
         m.bio.toLowerCase().includes(q)
     );
-  }, [q]);
-  const filteredObjectives = useMemo(() => {
-    if (!q) return CLUB_OBJECTIVES;
-    return CLUB_OBJECTIVES.filter(
-      (o) =>
-        o.title.toLowerCase().includes(q) ||
-        o.description.toLowerCase().includes(q)
+  }, [q, team]);
+
+  const effectiveFilteredObjectives = useMemo(() => {
+    if (!q) return objectives;
+    return objectives.filter(
+      (o) => o.title.toLowerCase().includes(q) || o.description.toLowerCase().includes(q)
     );
-  }, [q]);
+  }, [q, objectives]);
 
   useEffect(() => {
     const el = statsRef.current;
@@ -51,11 +82,11 @@ const ClubInfo = () => {
       step += 1;
       const progress = Math.min(step / steps, 1);
       const eased = 1 - (1 - progress) ** 2;
-      setStatValues(CLUB_STATS.map((s) => Math.round(s.value * eased)));
+      setStatValues(stats.map((s) => Math.round(s.value * eased)));
       if (step >= steps) clearInterval(t);
     }, duration / steps);
     return () => clearInterval(t);
-  }, [statsVisible]);
+  }, [statsVisible, stats]);
 
   return (
     <PageLayout
@@ -96,7 +127,7 @@ const ClubInfo = () => {
             </p>
           </div>
           <div className="space-y-2">
-            {CLUB_ACTIVITIES.map((a) => (
+            {activities.map((a) => (
               <div key={a.label} className="flex gap-3 p-3 rounded-lg bg-[#F9FAFB] dark:bg-[#1c212e] border border-[#E5E7EB] dark:border-[#3d4a5c]">
                 <span className="text-xl shrink-0" aria-hidden>{a.icon}</span>
                 <div>
@@ -121,8 +152,8 @@ const ClubInfo = () => {
           </p>
         </div>
         <div className="gfg-bento-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-          {filteredObjectives.length > 0 ? (
-            filteredObjectives.map((obj, index) => {
+          {effectiveFilteredObjectives.length > 0 ? (
+            effectiveFilteredObjectives.map((obj, index) => {
               const Icon =
                 index === 0 ? Target :
                 index === 1 ? Users :
@@ -148,7 +179,7 @@ const ClubInfo = () => {
         <div className="gfg-bento-span-1">
           <h3 className="text-sm font-semibold text-[#1F2937] dark:text-[#FFFFFF] mb-2">Our Impact</h3>
           <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-          {CLUB_STATS.map((item, i) => (
+          {stats.map((item, i) => (
             <div
               key={item.label}
               className="flex flex-col items-center p-3 rounded-lg bg-[#F9FAFB] dark:bg-[#1c212e] border border-[#E5E7EB] dark:border-[#3d4a5c]"
@@ -169,9 +200,9 @@ const ClubInfo = () => {
           Our Team
         </h2>
         <p className="text-xs text-[#6B7280] dark:text-[#E5E7EB] mb-4">Core Team & Faculty Advisor (2025–2026)</p>
-        {filteredTeam.length > 0 ? (
+        {effectiveFilteredTeam.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {filteredTeam.map((member) => (
+            {effectiveFilteredTeam.map((member) => (
               <TeamCard
                 key={member.name}
                 name={member.name}

@@ -3,16 +3,19 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { SiteThemeProvider } from './lib/context/SiteThemeContext';
 import { AuthProvider, useAuth } from './lib/context/AuthContext';
 import { SearchProvider } from './lib/context/SearchContext';
+import { AnimatePresence, motion } from 'motion/react';
 import TopBar from './components/layout/TopBar';
 import Sidebar from './components/layout/Sidebar';
 import Footer from './components/layout/Footer';
 import BackToTop from './components/layout/BackToTop';
+import WebsiteAssistant from './components/layout/WebsiteAssistant';
 import ClubInfo from './components/layout/ClubInfo';
 import Home from './pages/Home';
 import Contact from './pages/Contact';
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetail';
 import Resources from './pages/Resources';
+import LandingPage from './pages/LandingPage';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import SettingsPage from './pages/Settings';
@@ -25,13 +28,16 @@ import { CardDetailProvider } from './lib/context/CardDetailContext';
 import BottomNav from './components/layout/BottomNav';
 
 function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: () => void }) {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, authLoading } = useAuth();
   const location = useLocation();
   const isAuthRoute = location.pathname === '/signin' || location.pathname === '/signup';
   const isStandaloneRoute = location.pathname === '/badges';
+  const showAppChrome = !authLoading && isAuthenticated && !isStandaloneRoute && !isAuthRoute && location.pathname !== '/';
+  const showAssistant = !authLoading && isAuthenticated && !isAuthRoute && location.pathname !== '/';
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const RequireAuth = ({ children }: { children: React.ReactNode }) => {
+    if (authLoading) return null;
     if (!isAuthenticated) {
       return <Navigate to="/signin" replace />;
     }
@@ -40,7 +46,7 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
 
   return (
     <div className="flex flex-col min-h-screen w-full relative">
-      {!isAuthRoute && !isStandaloneRoute && (
+      {showAppChrome && (
         <>
           <Sidebar 
             isOpen={sidebarOpen} 
@@ -58,111 +64,123 @@ function AppRoutes({ darkMode, toggleTheme }: { darkMode: boolean; toggleTheme: 
           <BottomNav />
         </>
       )}
-      <main className={`gfg-main flex-grow w-full transition-all duration-300 ${!isAuthRoute && !isStandaloneRoute ? 'pt-16 sm:pt-20' : ''}`} id="gfg-main-content">
-        <Routes>
-          <Route
-            path="/signin"
-            element={isAuthenticated ? <Navigate to="/" replace /> : <SignIn />}
-          />
-          <Route
-            path="/signup"
-            element={isAuthenticated ? <Navigate to="/" replace /> : <SignUp />}
-          />
-          <Route
-            path="/"
-            element={
-              <RequireAuth>
-                <Home />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/club-info"
-            element={
-              <RequireAuth>
-                <ClubInfo />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <RequireAuth>
-                <Navigate to="/" replace />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/community"
-            element={
-              <RequireAuth>
-                <CommunityPage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/contact"
-            element={
-              <RequireAuth>
-                <Contact />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/events"
-            element={
-              <RequireAuth>
-                <Events />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/events/:id"
-            element={
-              <RequireAuth>
-                <EventDetail />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/resources"
-            element={
-              <RequireAuth>
-                <Resources />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/join"
-            element={
-              <RequireAuth>
-                <Join />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <RequireAuth>
-                <SettingsPage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/badges"
-            element={
-              <RequireAuth>
-                <BadgesPage />
-              </RequireAuth>
-            }
-          />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+      {showAssistant && <WebsiteAssistant />}
+      <main className={`gfg-main flex-grow w-full transition-all duration-300 ${showAppChrome ? 'pt-14 sm:pt-16' : ''}`} id="gfg-main-content">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+          >
+            <Routes>
+              <Route
+                path="/signin"
+                element={authLoading ? null : isAuthenticated ? <Navigate to="/app" replace /> : <SignIn />}
+              />
+              <Route
+                path="/signup"
+                element={authLoading ? null : isAuthenticated ? <Navigate to="/app" replace /> : <SignUp />}
+              />
+              <Route path="/" element={<LandingPage />} />
+              <Route
+                path="/app"
+                element={
+                  <RequireAuth>
+                    <Home />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/club-info"
+                element={
+                  <RequireAuth>
+                    <ClubInfo />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  <RequireAuth>
+                    <Navigate to="/app" replace />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/community"
+                element={
+                  <RequireAuth>
+                    <CommunityPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/contact"
+                element={
+                  <RequireAuth>
+                    <Contact />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/events"
+                element={
+                  <RequireAuth>
+                    <Events />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/events/:id"
+                element={
+                  <RequireAuth>
+                    <EventDetail />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/resources"
+                element={
+                  <RequireAuth>
+                    <Resources />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/join"
+                element={
+                  <RequireAuth>
+                    <Join />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <RequireAuth>
+                    <SettingsPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/badges"
+                element={
+                  <RequireAuth>
+                    <BadgesPage />
+                  </RequireAuth>
+                }
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </motion.div>
+        </AnimatePresence>
       </main>
-      {!isAuthRoute && !isStandaloneRoute && <Footer />}
-      {!isAuthRoute && !isStandaloneRoute && <div className="h-20 lg:hidden w-full shrink-0" />}
+      {showAppChrome && <Footer />}
+      {showAppChrome && <div className="h-16 lg:hidden w-full shrink-0" />}
 
-      <BackToTop />
+      {showAppChrome && <BackToTop />}
     </div>
   );
 }

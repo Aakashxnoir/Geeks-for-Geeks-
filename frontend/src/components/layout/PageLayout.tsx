@@ -25,19 +25,19 @@ export default function PageLayout({
   return (
     <div
       className={[
-        'gfg-page-module relative min-h-screen w-full pt-4 pb-8',
+        'gfg-page-module relative min-h-screen w-full pt-3 pb-6',
         isDark ? 'dark' : '',
       ].join(' ')}
     >
-      <div className="gfg-shell space-y-4 px-3 sm:px-4 lg:px-6">
-        <header className="glass-panel py-5 px-5 sm:py-6 sm:px-6 w-full">
+      <div className="gfg-shell space-y-3 px-3 sm:px-4 lg:px-6">
+        <header className="glass-panel py-4 px-4 sm:py-5 sm:px-5 w-full">
           <div className="min-w-0 w-full max-w-3xl">
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-[color:var(--gfg-text-primary)]">
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-2xl font-bold tracking-tight text-[color:var(--gfg-text-primary)]">
               <span className="text-[color:var(--gfg-accent)]">{title?.split(' ')[0]}</span>{' '}
               {title?.split(' ').slice(1).join(' ')}
             </h1>
             {subtitle && (
-              <p className="text-xs sm:text-sm text-[color:var(--gfg-text-secondary)] mt-1.5 leading-relaxed max-w-2xl">
+              <p className="text-[11px] sm:text-xs md:text-sm text-[color:var(--gfg-text-secondary)] mt-1 leading-relaxed max-w-2xl">
                 {subtitle}
               </p>
             )}

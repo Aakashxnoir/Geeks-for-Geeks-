@@ -1,11 +1,52 @@
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import PageLayout from '../components/layout/PageLayout';
-import { UPCOMING_EVENTS, getEventById, getEventPosterUrl } from '../utils/data/eventsData';
+import { getEventPosterUrl } from '../utils/data/eventsData';
 
 const EventDetail = () => {
   const { id } = useParams();
-  const event = getEventById(id);
+  const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:4000';
+  const [event, setEvent] = useState<any | null>(null);
+  const [isUpcoming, setIsUpcoming] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      if (!id) return;
+      setIsLoading(true);
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/events/${encodeURIComponent(id)}`);
+        if (!res.ok) {
+          if (!cancelled) setEvent(null);
+          return;
+        }
+        const data = await res.json();
+        if (cancelled) return;
+        setEvent(data?.event ?? null);
+        setIsUpcoming(!!data?.isUpcoming);
+      } catch {
+        if (!cancelled) setEvent(null);
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [API_BASE_URL, id]);
+
+  if (isLoading) {
+    return (
+      <PageLayout title="Event" subtitle="">
+        <section className="gfg-card text-center">
+          <p className="text-[#4B5563] dark:text-white mb-4">Loading event...</p>
+        </section>
+      </PageLayout>
+    );
+  }
 
   if (!event) {
     return (
@@ -18,7 +59,6 @@ const EventDetail = () => {
     );
   }
 
-  const isUpcoming = UPCOMING_EVENTS.some((e) => e.id === event.id);
   const regLink = event.registrationLink || 'https://docs.google.com/forms/';
 
   return (

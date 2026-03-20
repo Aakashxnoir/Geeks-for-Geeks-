@@ -12,8 +12,6 @@ import {
   Linkedin,
   Image,
   Phone,
-  Bot,
-  Send,
 } from 'lucide-react';
 import PageLayout from '../components/layout/PageLayout';
 import {
@@ -24,14 +22,11 @@ import {
   FAQ_ITEMS,
   SUBJECT_OPTIONS,
   MAP_EMBED_URL,
-  CHATBOT_KNOWLEDGE,
 } from '../utils/data/contactData';
 
 const MESSAGE_MAX_LENGTH = 500;
 
 const SOCIAL_ICONS = { Instagram: Image, LinkedIn: Linkedin };
-const CHATBOT_FALLBACK = "I can help with: the club, events, resources, how to join, and contact info. Try asking 'What events do you have?', 'How do I join?', or 'How can I contact the club?'";
-
 interface FormData {
   fullName: string;
   email: string;
@@ -52,35 +47,20 @@ const Contact = () => {
   const [submitted, setSubmitted] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState('');
   const [openFaq, setOpenFaq] = useState(null);
-  const [floatOpen, setFloatOpen] = useState(false);
   const [easterEgg, setEasterEgg] = useState(false);
+  const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:4000';
+
+  const [contactStats, setContactStats] = useState(CONTACT_STATS);
+  const [teamContacts, setTeamContacts] = useState(TEAM_CONTACTS);
+  const [clubEmail, setClubEmail] = useState(CLUB_EMAIL);
+  const [faqItems, setFaqItems] = useState(FAQ_ITEMS);
+  const [subjectOptions, setSubjectOptions] = useState(SUBJECT_OPTIONS);
+  const [mapEmbedUrl, setMapEmbedUrl] = useState(MAP_EMBED_URL);
+
   const [statValues, setStatValues] = useState(CONTACT_STATS.map(() => 0));
   const [statsVisible, setStatsVisible] = useState(false);
-  const [chatMessages, setChatMessages] = useState([
-    { role: 'bot', text: "Hi! I'm the GFG RIT assistant. Ask me about the club, events, resources, how to join, or contact info." },
-  ]);
-  const [chatInput, setChatInput] = useState('');
   const keyBufferRef = useRef('');
   const statsRef = useRef(null);
-  const chatEndRef = useRef(null);
-
-  const getBotResponse = (userText) => {
-    const lower = userText.trim().toLowerCase();
-    if (!lower) return CHATBOT_FALLBACK;
-    for (const { keywords, answer } of CHATBOT_KNOWLEDGE) {
-      if (keywords.some((k) => lower.includes(k))) return answer;
-    }
-    return CHATBOT_FALLBACK;
-  };
-
-  const sendChatMessage = () => {
-    const text = chatInput.trim();
-    if (!text) return;
-    setChatMessages((prev) => [...prev, { role: 'user', text }]);
-    setChatInput('');
-    const reply = getBotResponse(text);
-    setChatMessages((prev) => [...prev, { role: 'bot', text: reply }]);
-  };
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -91,7 +71,7 @@ const Contact = () => {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: FormErrors = {};
     if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
@@ -103,6 +83,21 @@ const Contact = () => {
       setErrors(newErrors);
       return;
     }
+    try {
+      await fetch(`${API_BASE_URL}/api/contact/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.fullName,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        }),
+      });
+    } catch {
+      // Best-effort: even if backend fails, keep UI consistent.
+    }
+
     setSubmitted(true);
     setSubmittedEmail(formData.email || '');
     setFormData({ fullName: '', email: '', subject: '', message: '' });
@@ -129,11 +124,39 @@ const Contact = () => {
       step += 1;
       const progress = Math.min(step / steps, 1);
       const eased = 1 - (1 - progress) ** 2;
-      setStatValues(CONTACT_STATS.map((s, i) => Math.round((s.value || 0) * eased)));
+      setStatValues(contactStats.map((s) => Math.round((s.value || 0) * eased)));
       if (step >= steps) clearInterval(t);
     }, duration / steps);
     return () => clearInterval(t);
-  }, [statsVisible]);
+  }, [statsVisible, contactStats]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/contact`);
+        const data = await res.json();
+        if (cancelled) return;
+
+        const nextStats = Array.isArray(data?.contactStats) ? data.contactStats : CONTACT_STATS;
+        setContactStats(nextStats);
+        setStatValues(nextStats.map(() => 0));
+
+        setTeamContacts(Array.isArray(data?.teamContacts) ? data.teamContacts : TEAM_CONTACTS);
+        setClubEmail(data?.clubEmail || CLUB_EMAIL);
+        setFaqItems(Array.isArray(data?.faqItems) ? data.faqItems : FAQ_ITEMS);
+        setSubjectOptions(Array.isArray(data?.subjectOptions) ? data.subjectOptions : SUBJECT_OPTIONS);
+        setMapEmbedUrl(data?.mapEmbedUrl || MAP_EMBED_URL);
+      } catch {
+        // Keep mock constants if backend is unreachable.
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [API_BASE_URL]);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -146,10 +169,6 @@ const Contact = () => {
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, []);
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatMessages]);
 
   const inputClass =
     'w-full pl-10 pr-4 py-3 rounded-xl border bg-[#FFFFFF] dark:bg-[#18181b] text-[#1F2937] dark:text-[#FFFFFF] placeholder:text-[#6B7280] dark:placeholder:text-[#71717a] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F8D46]/30 dark:focus-visible:ring-[#22C55E]/50 border-[#E5E7EB] dark:border-[#3f3f46] focus:border-[#2F8D46] dark:focus:border-[#22C55E] transition-colors';
@@ -174,11 +193,11 @@ const Contact = () => {
         </p>
         <div className="flex flex-wrap items-center gap-4 sm:gap-6">
           <a
-            href={`mailto:${CLUB_EMAIL}`}
+            href={`mailto:${clubEmail}`}
             className="inline-flex items-center gap-2 text-sm font-semibold text-[#047857] dark:text-[#4ADE80] hover:underline"
           >
             <Mail className="w-4 h-4" aria-hidden />
-            {CLUB_EMAIL}
+            {clubEmail}
           </a>
           <a
             href="https://wa.me/917558124869"
@@ -202,7 +221,7 @@ const Contact = () => {
           Club at a glance
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {CONTACT_STATS.map((item, i) => (
+          {contactStats.map((item, i) => (
             <div
               key={item.label}
               className="flex flex-col items-center p-4 rounded-lg bg-[#F9FAFB] dark:bg-[#18181b] border border-[#E5E7EB] dark:border-[#3f3f46]"
@@ -286,7 +305,7 @@ const Contact = () => {
                   aria-invalid={!!errors.subject}
                 >
                   <option value="">Select subject</option>
-                  {SUBJECT_OPTIONS.map((opt) => (
+                  {subjectOptions.map((opt) => (
                     <option key={opt} value={opt}>
                       {opt}
                     </option>
@@ -356,7 +375,7 @@ const Contact = () => {
         <div className="glass-card p-4 sm:p-6 order-1 lg:order-2">
           <h3 className="text-base sm:text-lg font-bold text-[#1F2937] dark:text-[#FFFFFF] mb-4">FAQ</h3>
           <div className="space-y-2">
-            {FAQ_ITEMS.map((item, i) => (
+            {faqItems.map((item, i) => (
               <div
                 key={i}
                 className="rounded-lg border border-[#E5E7EB] dark:border-[#3f3f46] overflow-hidden"
@@ -390,7 +409,7 @@ const Contact = () => {
           Team Contact
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {TEAM_CONTACTS.map((person) => (
+          {teamContacts.map((person) => (
             <article
               key={person.name}
               className="p-4 rounded-lg border border-[#E5E7EB] dark:border-[#3f3f46] bg-[#F9FAFB] dark:bg-[#18181b] hover:border-[#2F8D46] dark:hover:border-[#22C55E] transition-colors"
@@ -437,7 +456,7 @@ const Contact = () => {
         <div className="rounded-lg overflow-hidden border border-[#E5E7EB] dark:border-[#30363d]">
           <iframe
             title="RIT Chennai location"
-            src={MAP_EMBED_URL}
+            src={mapEmbedUrl}
             className="w-full h-[260px] sm:h-[320px] border-0"
             allowFullScreen
             loading="lazy"
@@ -493,67 +512,6 @@ const Contact = () => {
           })}
         </div>
       </section>
-
-      {/* Chatbot float — answers questions about the website */}
-      <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-2" aria-label="Website assistant">
-        {floatOpen && (
-          <div className="w-[340px] sm:w-[380px] rounded-xl border border-[#E5E7EB] dark:border-[#3f3f46] bg-white dark:bg-[#18181b] shadow-xl overflow-hidden flex flex-col max-h-[420px]">
-            <div className="px-4 py-3 border-b border-[#E5E7EB] dark:border-[#3f3f46] bg-[#F9FAFB] dark:bg-[#111113] flex items-center gap-2">
-              <span className="w-8 h-8 rounded-lg bg-[#2F8D46] dark:bg-[#22C55E] flex items-center justify-center text-white">
-                <Bot className="w-4 h-4" aria-hidden />
-              </span>
-              <span className="font-semibold text-sm text-[#1F2937] dark:text-white">Website assistant</span>
-            </div>
-            <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-[200px]">
-              {chatMessages.map((msg, i) => (
-                <div
-                  key={i}
-                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
-                      msg.role === 'user'
-                        ? 'bg-[#2F8D46] dark:bg-[#22C55E] text-white'
-                        : 'bg-[#E5E7EB] dark:bg-[#27272a] text-[#1F2937] dark:!text-[#FFFFFF]'
-                    }`}
-                  >
-                    {msg.text}
-                  </div>
-                </div>
-              ))}
-              <div ref={chatEndRef} />
-            </div>
-            <div className="p-3 border-t border-[#E5E7EB] dark:border-[#3f3f46] flex gap-2">
-              <input
-                type="text"
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && sendChatMessage()}
-                placeholder="Ask about the club, events, resources..."
-                className="flex-1 rounded-lg border border-[#E5E7EB] dark:border-[#3f3f46] bg-[#F9FAFB] dark:bg-[#111113] text-[#1F2937] dark:!text-[#FFFFFF] placeholder-[#9CA3AF] dark:placeholder-[#71717a] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2F8D46] dark:focus:ring-[#22C55E]"
-                aria-label="Ask a question"
-              />
-              <button
-                type="button"
-                onClick={sendChatMessage}
-                className="rounded-lg bg-[#2F8D46] dark:bg-[#22C55E] text-white p-2 hover:opacity-90 transition-opacity"
-                aria-label="Send"
-              >
-                <Send className="w-5 h-5" aria-hidden />
-              </button>
-            </div>
-          </div>
-        )}
-        <button
-          type="button"
-          onClick={() => setFloatOpen(!floatOpen)}
-          className="w-14 h-14 rounded-xl bg-[#2F8D46] dark:bg-[#22C55E] text-white shadow-lg hover:opacity-90 transition-opacity flex items-center justify-center"
-          aria-expanded={floatOpen}
-          aria-label={floatOpen ? 'Close assistant' : 'Open website assistant'}
-        >
-          {floatOpen ? <X className="w-6 h-6" aria-hidden /> : <Bot className="w-6 h-6" aria-hidden />}
-        </button>
-      </div>
 
       {easterEgg && (
         <div

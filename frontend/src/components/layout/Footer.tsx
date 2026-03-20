@@ -12,7 +12,7 @@ const Footer = ({ className = '' }: FooterProps) => {
           © {new Date().getFullYear()} GeeksforGeeks Campus Club – <span className="text-[color:var(--gfg-accent)] font-bold">RIT</span> | Made for GfG Challenge
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#94a3b8] dark:text-[#71717a]">
-          <Link to="/" className="hover:text-[color:var(--gfg-accent)] transition-colors">Home</Link>
+          <Link to="/app" className="hover:text-[color:var(--gfg-accent)] transition-colors">Home</Link>
           <Link to="/join" className="hover:text-[color:var(--gfg-accent)] transition-colors">Join</Link>
           <Link to="/events" className="hover:text-[color:var(--gfg-accent)] transition-colors">Events</Link>
           <Link to="/resources" className="hover:text-[color:var(--gfg-accent)] transition-colors">Resources</Link>
