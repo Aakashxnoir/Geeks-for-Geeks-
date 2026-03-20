@@ -68,10 +68,6 @@ const Resources = () => {
     return matchCategory && matchSearch;
   });
 
-  const handleResourceClick = (_r: any) => {
-     // Info displayed directly in card — no popup
-  };
-
   return (
     <PageLayout
       title="Learning Resources"
@@ -86,10 +82,13 @@ const Resources = () => {
             {filtered.map((r) => {
               const Icon = getResourceIcon(r.category, r.type);
               return (
-                <article
+                <a
                   key={r.id}
-                  onClick={() => handleResourceClick(r)}
+                  href={r.link || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="glass-card p-4 cursor-pointer hover:ring-2 hover:ring-[color:var(--gfg-accent)] active:scale-[0.98] transition-all overflow-hidden"
+                  aria-label={`Open resource: ${r.title}`}
                 >
                   <div className="flex flex-wrap gap-2 items-center pointer-events-none">
                     <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[color:var(--gfg-accent)]/10 border border-[color:var(--gfg-accent)]/20">
@@ -117,7 +116,7 @@ const Resources = () => {
                       Learn more →
                     </span>
                   </div>
-                </article>
+                </a>
               );
             })}
           </div>

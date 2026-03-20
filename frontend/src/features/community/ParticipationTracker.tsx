@@ -56,25 +56,35 @@ function ProgressBar({
 
 function StudentModal({
   student,
+  anchorRect,
   onClose,
 }: {
   student: Student;
+  anchorRect: { top: number; left: number; width: number } | null;
   onClose: () => void;
 }) {
+  const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+  const modalWidth = Math.min(460, viewportWidth - 24);
+  const left = anchorRect
+    ? Math.min(Math.max(12, anchorRect.left), Math.max(12, viewportWidth - modalWidth - 12))
+    : Math.max(12, (viewportWidth - modalWidth) / 2);
+  const top = anchorRect ? Math.max(12, anchorRect.top - 18) : 80;
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+      className="fixed inset-0 z-50 bg-black/35 backdrop-blur-[2px]"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="student-modal-title"
     >
       <div
-        className="bg-white dark:bg-[#141922] rounded-xl shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#E5E7EB] dark:border-[#3d4a5c]"
+        className="glass-card w-full max-h-[74vh] overflow-y-auto border border-[#86efac]/40 dark:border-[#22C55E]/25 shadow-2xl"
+        style={{ maxWidth: `${modalWidth}px`, left: `${left}px`, top: `${top}px`, position: 'fixed' }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sticky top-0 bg-white dark:bg-[#141922] border-b border-[#E5E7EB] dark:border-[#3d4a5c] px-4 sm:px-6 py-4 flex items-center justify-between z-10">
-          <h2 id="student-modal-title" className="text-lg font-semibold text-[#1F2937] dark:text-[#FFFFFF] truncate pr-2">
+        <div className="sticky top-0 bg-white/65 dark:bg-[#0f172a]/70 backdrop-blur-xl border-b border-[#86efac]/35 dark:border-[#22C55E]/25 px-4 py-3 flex items-center justify-between z-10">
+          <h2 id="student-modal-title" className="text-base font-semibold text-[#14532d] dark:text-[#4ade80] truncate pr-2">
             Resume-Ready Profile
           </h2>
           <button
@@ -86,7 +96,7 @@ function StudentModal({
             <X className="w-5 h-5" />
           </button>
         </div>
-        <div className="p-4 sm:p-6 space-y-6">
+        <div className="p-4 space-y-4">
           <div className="flex flex-wrap items-center gap-4">
             <img
               src={student.profileImage}
@@ -95,7 +105,7 @@ function StudentModal({
               className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-[#E5E7EB] dark:border-[#3d4a5c]"
             />
             <div className="min-w-0 flex-1">
-              <h3 className="text-lg sm:text-xl font-semibold text-[#1F2937] dark:text-[#FFFFFF] truncate">{student.name}</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-[#14532d] dark:text-[#4ade80] truncate">{student.name}</h3>
               <p className="text-sm text-[#6B7280] dark:text-[#E5E7EB]">{student.rollNumber} · {student.department} · Year {student.year}</p>
               <span
                 className={clsx(
@@ -115,7 +125,7 @@ function StudentModal({
             <ProgressBar label="Events attended" value={student.eventsAttended} max={MAX_EVENTS} />
             <ProgressBar label="Contribution hours" value={student.contributionHours} max={MAX_HOURS} />
           </div>
-          <ResumeAchievementProfile student={student} />
+          <ResumeAchievementProfile student={student} compact />
         </div>
       </div>
     </div>
@@ -135,7 +145,14 @@ export default function ParticipationTracker({
   const [sortBy, setSortBy] = useState<'activity' | 'problems' | 'streak' | 'points'>('points');
   const [localSearch, setLocalSearch] = useState('');
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [selectedAnchorRect, setSelectedAnchorRect] = useState<{ top: number; left: number; width: number } | null>(null);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const openStudentProfile = (student: Student, target: HTMLElement | null) => {
+    const rect = target?.getBoundingClientRect();
+    setSelectedAnchorRect(rect ? { top: rect.top, left: rect.left, width: rect.width } : null);
+    setSelectedStudent(student);
+  };
+
 
   const query = searchQuery ?? localSearch;
 
@@ -289,7 +306,7 @@ export default function ParticipationTracker({
               <button
                 key={s.id}
                 type="button"
-                onClick={() => setSelectedStudent(s)}
+                onClick={(e) => openStudentProfile(s, e.currentTarget)}
                 className="gfg-top-contributor-btn flex items-center gap-2 px-3 py-2 md:py-1.5 rounded-lg bg-[#FFFFFF] dark:bg-[#141922] border border-[#E5E7EB] dark:border-[#3d4a5c] hover:border-[#2F8D46] dark:hover:border-[#22C55E] hover:shadow-sm transition-colors duration-200 min-w-0"
               >
                 <span className="inline-flex items-center justify-center min-w-[2rem] px-1.5 py-0.5 rounded-full text-xs font-bold bg-[#E5E7EB] dark:bg-[#1c212e] dark:border dark:border-[#22C55E]/60 text-[#1F2937] dark:text-[#22C55E] shrink-0">#{i + 1}</span>
@@ -308,6 +325,7 @@ export default function ParticipationTracker({
           {filteredAndSorted.map((s) => (
             <article
               key={s.id}
+              onClick={(e) => openStudentProfile(s, e.currentTarget)}
               className="rounded-xl border border-[#E5E7EB] dark:border-[#3d4a5c] bg-white dark:bg-[#141922] p-4"
             >
               <div className="flex items-start gap-3">
@@ -342,13 +360,7 @@ export default function ParticipationTracker({
                     >
                       {s.statusBadge}
                     </span>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedStudent(s)}
-                      className="text-sm font-medium text-[#2F8D46] dark:text-[#22C55E] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F8D46] dark:focus-visible:ring-[#22C55E] focus-visible:ring-offset-2 rounded px-2 py-1 min-h-[44px] min-w-[44px] flex items-center justify-center"
-                    >
-                      View profile
-                    </button>
+                    <span className="text-sm font-medium text-[#2F8D46] dark:text-[#22C55E]">Tap card to view profile</span>
                   </div>
                 </div>
               </div>
@@ -380,7 +392,7 @@ export default function ParticipationTracker({
                   <td className="py-3 pr-2 sm:pr-4">
                     <button
                       type="button"
-                      onClick={() => setSelectedStudent(s)}
+                      onClick={(e) => openStudentProfile(s, e.currentTarget)}
                       className="flex items-center gap-2 text-left group min-w-0"
                     >
                       <img
@@ -435,7 +447,11 @@ export default function ParticipationTracker({
       {selectedStudent && (
         <StudentModal
           student={selectedStudent}
-          onClose={() => setSelectedStudent(null)}
+          anchorRect={selectedAnchorRect}
+          onClose={() => {
+            setSelectedStudent(null);
+            setSelectedAnchorRect(null);
+          }}
         />
       )}
     </section>

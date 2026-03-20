@@ -219,7 +219,10 @@ export default function WebsiteAssistant() {
   }, [open, messages.length, isLoading]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-2" aria-label="Website assistant">
+    <div
+      className="fixed right-5 bottom-24 sm:right-6 sm:bottom-24 md:bottom-8 z-[100] flex flex-col items-end gap-3"
+      aria-label="Website assistant"
+    >
       {open ? (
         <div className="w-[340px] sm:w-[380px] rounded-xl border border-[#E5E7EB] dark:border-[#3f3f46] bg-white dark:bg-[#18181b] shadow-xl overflow-hidden flex flex-col max-h-[420px]">
           <div className="px-4 py-3 border-b border-[#E5E7EB] dark:border-[#3f3f46] bg-[#F9FAFB] dark:bg-[#111113] flex items-center gap-2">

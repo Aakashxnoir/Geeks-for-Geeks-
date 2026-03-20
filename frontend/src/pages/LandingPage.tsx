@@ -10,13 +10,11 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen w-full flex flex-col bg-[#f0fdf4] dark:bg-[#070707]">
       <header className="w-full">
-        <div className="mx-auto max-w-[1180px] px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
+        <div className="mx-auto max-w-[1180px] px-3 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-2 sm:gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#16a34a] to-[#0f2d1a] flex items-center justify-center shadow-lg">
-              <img src="/logo.png" alt="GFG X RIT" className="w-7 h-7 object-contain" />
-            </div>
+            <img src="/logo.png" alt="GFG X RIT" className="w-10 h-10 object-contain" />
             <div className="min-w-0">
-              <div className="text-base sm:text-lg font-extrabold tracking-tight text-[#0f2d1a] dark:text-white truncate">
+              <div className="text-sm sm:text-lg font-extrabold tracking-tight text-[#15803d] dark:text-[#4ade80] truncate">
                 GFG <span className="text-[color:var(--gfg-accent)]">X</span> RIT
               </div>
               <div className="text-[11px] sm:text-xs font-semibold text-[#2f855a]/80 dark:text-[#22c55e] truncate">
@@ -42,13 +40,21 @@ export default function LandingPage() {
               Login <ArrowRight className="w-4 h-4" aria-hidden />
             </Link>
 
-            <Link
-              to="/signup"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold bg-[#16a34a] text-white hover:bg-[#15803d] transition-colors"
-            >
-              Get Started Now <ArrowRight className="w-4 h-4" aria-hidden />
+            <Link to="/signup" className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl font-semibold bg-[#16a34a] text-white hover:bg-[#15803d] transition-colors shrink-0">
+              <span className="hidden sm:inline">Get Started Now</span>
+              <span className="sm:hidden">Start</span>
+              <ArrowRight className="w-4 h-4" aria-hidden />
             </Link>
           </div>
+        </div>
+        <div className="sm:hidden px-3 pb-3">
+          <Link
+            to="/signup"
+            className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold bg-[#16a34a] text-white hover:bg-[#15803d] transition-colors"
+          >
+            Get Started
+            <ArrowRight className="w-4 h-4" aria-hidden />
+          </Link>
         </div>
       </header>
 
@@ -63,7 +69,7 @@ export default function LandingPage() {
               <div className="relative p-6 sm:p-10">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                   <div className="max-w-2xl">
-                    <h1 className="mt-4 text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-[1.05]">
+                    <h1 className="mt-2 sm:mt-4 text-2xl sm:text-5xl font-extrabold tracking-tight text-white leading-[1.05]">
                       Learn.
                       <br />
                       Compete.
@@ -71,7 +77,7 @@ export default function LandingPage() {
                       Grow.
                     </h1>
 
-                    <p className="mt-4 text-white/90 text-sm sm:text-base leading-relaxed max-w-[52ch]">
+                    <p className="mt-3 sm:mt-4 text-white/90 text-xs sm:text-base leading-relaxed max-w-[52ch]">
                       {HERO.description}
                     </p>
 
@@ -153,7 +159,7 @@ export default function LandingPage() {
                 key={f.title}
                 className="rounded-3xl border border-[#bbf7d0]/70 dark:border-[#14532d]/70 bg-white/70 dark:bg-white/5 backdrop-blur p-5"
               >
-                <div className="text-[#0f2d1a] dark:text-white font-extrabold">{f.title}</div>
+                <div className="text-[#15803d] dark:text-[#4ade80] font-extrabold">{f.title}</div>
                 <div className="text-[#0f2d1a]/80 dark:text-white/80 text-sm mt-2 leading-relaxed">
                   {f.body}
                 </div>

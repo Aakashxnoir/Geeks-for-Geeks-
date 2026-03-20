@@ -3,7 +3,7 @@ import { Home, Users, Calendar, BookOpen, UserPlus } from 'lucide-react';
 
 const bottomNavItems = [
   { to: '/app', label: 'Home', icon: Home },
-  { to: '/community', label: 'Nodes', icon: Users },
+  { to: '/community', label: 'Community', icon: Users },
   { to: '/events', label: 'Events', icon: Calendar },
   { to: '/resources', label: 'Vault', icon: BookOpen },
   { to: '/join', label: 'Join', icon: UserPlus },
@@ -28,7 +28,7 @@ export default function BottomNav() {
               <div className={`p-1.5 rounded-xl transition-all ${isActive ? 'bg-[color:var(--gfg-accent)]/10 scale-110' : ''}`}>
                 <Icon size={20} className={isActive ? 'stroke-[2.5px]' : 'stroke-[2px]'} />
               </div>
-              <span className={`text-[9px] font-black uppercase tracking-widest ${isActive ? 'opacity-100 scale-100' : 'opacity-60 scale-95'}`}>
+              <span className={`text-[10px] font-extrabold uppercase tracking-wide ${isActive ? 'opacity-100 scale-100' : 'opacity-80 scale-100'}`}>
                 {label}
               </span>
               {isActive && (

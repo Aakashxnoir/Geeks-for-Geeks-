@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Search, Moon, Sun, Menu, Bell, Settings, X } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Search, Moon, Sun, Menu, Bell, Settings, X, User, LogOut } from 'lucide-react';
 import { useSearch } from '../../lib/context/SearchContext';
+import { useAuth } from '../../lib/context/AuthContext';
 
 interface TopBarProps {
   darkMode: boolean;
@@ -11,10 +12,14 @@ interface TopBarProps {
 
 const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { query, setQuery, submitSearch } = useSearch();
+  const { user, logout } = useAuth();
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const notificationsRef = useRef<HTMLDivElement>(null);
+  const settingsRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   
   const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:4000';
@@ -34,6 +39,9 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
     const handleClickOutside = (e: MouseEvent) => {
       if (notificationsRef.current && !notificationsRef.current.contains(e.target as Node)) {
         setNotificationsOpen(false);
+      }
+      if (settingsRef.current && !settingsRef.current.contains(e.target as Node)) {
+        setSettingsOpen(false);
       }
     };
     document.addEventListener('click', handleClickOutside);
@@ -66,6 +74,25 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
     e.preventDefault();
     submitSearch();
     setIsMobileSearchOpen(false);
+  };
+
+  const displayName = user?.name || 'Admin';
+  const displayEmail = user?.email || 'admin@civiq.city';
+
+  const handleOpenSettings = () => {
+    setSettingsOpen(false);
+    navigate('/settings');
+  };
+
+  const handleProfileClick = () => {
+    setSettingsOpen(false);
+    navigate('/settings');
+  };
+
+  const handleSignOut = () => {
+    setSettingsOpen(false);
+    logout();
+    navigate('/signin', { replace: true });
   };
 
   return (
@@ -102,7 +129,7 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
           </form>
 
           {/* Desktop-only Navigation Links */}
-          <div className="hidden lg:flex items-center gap-1 xl:gap-2 ml-auto justify-end overflow-hidden">
+          <div className="hidden lg:flex items-center gap-1 xl:gap-2 overflow-hidden">
             {[
               { to: '/app', label: 'Home' },
               { to: '/community', label: 'Community' },
@@ -110,7 +137,8 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
               { to: '/club-info', label: 'About Club' },
               { to: '/resources', label: 'Knowledge Base' },
               { to: '/join', label: 'Join RIT' },
-              { to: '/contact', label: 'Connect' }
+              { to: '/contact', label: 'Connect' },
+              { to: '/settings', label: 'Settings' }
             ].map((link) => (
               <Link 
                 key={link.to} 
@@ -179,9 +207,55 @@ const TopBar = ({ darkMode, onToggleDarkMode, onOpenSidebar }: TopBarProps) => {
               )}
             </div>
 
-            <Link to="/settings" className="p-2 inset-y-0 rounded-xl text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-all">
-              <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
-            </Link>
+            <div className="relative" ref={settingsRef}>
+              <button
+                type="button"
+                onClick={() => setSettingsOpen((prev) => !prev)}
+                className="p-2 rounded-xl text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-all"
+                aria-expanded={settingsOpen}
+                aria-haspopup="menu"
+                aria-label="Open account menu"
+              >
+                <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
+
+              {settingsOpen && (
+                <div className={`absolute right-0 mt-3 w-64 rounded-2xl overflow-hidden border z-50 gfg-modal-enter ${darkMode ? 'bg-[#0f172a]/80 border-[#3d4a5c] backdrop-blur-xl' : 'bg-white/70 border-[#d9efe2] backdrop-blur-xl'}`}>
+                  <div className="p-3 border-b border-[#cfe8da] dark:border-[#334155]">
+                    <p className="text-3 font-bold text-[#0f172a] dark:text-white">{displayName}</p>
+                    <p className="text-xs text-[#6B7280] dark:text-[#cbd5e1] mt-1">{displayEmail}</p>
+                    <div className="mt-2 inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-black tracking-wide bg-[#34d399]/20 text-[#059669]">
+                      OPS_MANAGER
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleOpenSettings}
+                    className="w-full px-4 py-3 flex items-center gap-3 text-left text-[#374151] dark:text-[#cbd5e1] hover:bg-[#f3f4f6]/80 dark:hover:bg-white/5 transition-colors"
+                  >
+                    <Settings className="w-4 h-4" />
+                    <span className="font-semibold">Settings</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleProfileClick}
+                    className="w-full px-4 py-3 flex items-center gap-3 text-left text-[#374151] dark:text-[#cbd5e1] hover:bg-[#f3f4f6]/80 dark:hover:bg-white/5 transition-colors"
+                  >
+                    <User className="w-4 h-4" />
+                    <span className="font-semibold">Profile</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="w-full px-4 py-3 flex items-center gap-3 text-left text-red-500 hover:bg-red-50/80 dark:hover:bg-red-500/10 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span className="font-semibold">Sign out</span>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

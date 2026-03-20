@@ -51,7 +51,7 @@ export default function SignIn() {
             <img
               src="/logo.png"
               alt="GFG X RIT"
-              className="w-10 h-10 rounded-xl bg-white shadow-lg p-2 object-contain"
+              className="w-10 h-10 object-contain"
             />
             <span className="text-xl font-bold tracking-tight">GeeksforGeeks RIT</span>
           </Link>
@@ -122,7 +122,7 @@ export default function SignIn() {
             <img
               src="/logo.png"
               alt="GFG X RIT"
-              className="w-10 h-10 rounded-xl bg-[#16a34a] shadow-lg p-1 object-contain"
+              className="w-10 h-10 object-contain"
             />
             <span className="text-xl font-bold tracking-tight text-[#09090b] dark:text-white">GFG RIT</span>
           </Link>

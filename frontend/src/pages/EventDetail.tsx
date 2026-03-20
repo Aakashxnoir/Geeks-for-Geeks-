@@ -124,7 +124,7 @@ const EventDetail = () => {
             href={regLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 py-2 rounded-lg text-sm font-medium bg-[#2F8D46] dark:bg-[#22C55E] text-white dark:text-[#052E16] hover:opacity-90 transition-opacity"
+            className="px-4 py-2 rounded-lg text-sm font-semibold bg-[#2F8D46] dark:bg-[#22C55E] !text-white hover:opacity-90 transition-opacity"
           >
             Register for this event
           </a>

@@ -59,10 +59,6 @@ const Events = () => {
       ? bySearch
       : bySearch.filter((e) => e.type && e.type.toLowerCase() === typeFilter.toLowerCase());
 
-  const handleEventClick = (_e: React.MouseEvent, _event: any) => {
-    // Navigate directly to event detail page — no popup overlay
-  };
-
   return (
     <PageLayout
       title="Events"
@@ -81,7 +77,6 @@ const Events = () => {
                 <Link
                   key={event.id}
                   to={`/events/${event.id}`}
-                  onClick={(e) => handleEventClick(e, event)}
                   className="glass-card overflow-hidden block hover:no-underline p-4 cursor-pointer hover:ring-2 hover:ring-[color:var(--gfg-accent)] active:scale-[0.98] transition-all"
                   aria-label={`View details for ${event.title}`}
                 >
